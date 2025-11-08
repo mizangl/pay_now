@@ -44,6 +44,7 @@ android {
 dependencies {
     implementation(project(":feature:credit_card"))
     implementation(project(":feature:credit_card_verification"))
+    implementation(project(":feature:verification_outcome"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
