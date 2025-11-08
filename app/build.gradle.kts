@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:credit_card"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.ktx)

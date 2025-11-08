@@ -34,6 +34,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
+import io.mz.checkout.creditcard.navigation.CreditCardRoute
+import io.mz.checkout.creditcard.navigation.creditCardScreen
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -43,24 +45,13 @@ fun PayNowNavHost(
 ) {
   NavHost(
     navController = navController,
-    startDestination = Main,
+    startDestination = CreditCardRoute,
     modifier = modifier
   ) {
-    composable<Main> {
-      Box(
-        modifier = Modifier.fillMaxSize()
-      ) {
-        Button(
-          modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(24.dp)
-            .fillMaxWidth(),
-          onClick = { navController.navigate(Process) }
-        ) {
-          Text("Pay")
-        }
-      }
-    }
+
+    creditCardScreen(
+      onPayClicked = { navController.navigate(Process) }
+    )
 
     composable<Process> {
       AndroidView(
