@@ -13,22 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.paynow.android.feature)
-    alias(libs.plugins.paynow.android.library.compose)
-    alias(libs.plugins.paynow.spotless)
-}
+package io.mz.checkout.creditcard.data.repository
 
-android {
-    namespace = "io.mz.checkout.paynow.creditcard"
-}
-
-dependencies {
-    implementation(project(":common"))
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.kotlinx.datetime)
+inline fun <reified T> safe(block: () -> T): Result<T> {
+  return runCatching { block() }
 }

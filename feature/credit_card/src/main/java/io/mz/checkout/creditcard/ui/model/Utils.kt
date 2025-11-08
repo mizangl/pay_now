@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.paynow.android.feature)
-    alias(libs.plugins.paynow.android.library.compose)
-    alias(libs.plugins.paynow.spotless)
+package io.mz.checkout.creditcard.ui.model
+
+import java.util.Locale
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeComponents
+import kotlinx.datetime.format.byUnicodePattern
+
+val DefaultLocalDateTimeFormatter = LocalDateTime.Format {
+  Locale.US
+  byUnicodePattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  DefaultTimeZone
 }
 
-android {
-    namespace = "io.mz.checkout.paynow.creditcard"
+val DefaultTimeComponentFormatter = DateTimeComponents.Format {
+  Locale.US
+  byUnicodePattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  DefaultTimeZone
 }
-
-dependencies {
-    implementation(project(":common"))
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.kotlinx.datetime)
-}
+val DefaultTimeZone = TimeZone.UTC

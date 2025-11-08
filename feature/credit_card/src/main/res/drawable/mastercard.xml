@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2025 Martin Zangl
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="80" android:viewportWidth="120" android:width="36dp">
+      
+    <path android:fillColor="#ffffff" android:pathData="M4,0L116,0A4,4 0,0 1,120 4L120,76A4,4 0,0 1,116 80L4,80A4,4 0,0 1,0 76L0,4A4,4 0,0 1,4 0z"/>
+      
+    <path android:fillColor="#F79E1B" android:fillType="evenOdd" android:pathData="M97.53,54.66V53.74H97.29L97.01,54.37L96.74,53.74H96.5V54.66H96.67V53.96L96.93,54.56H97.1L97.36,53.96V54.66H97.53ZM96.01,54.66V53.89H96.32V53.74H95.54V53.89H95.84V54.66H96.01Z"/>
+      
+    <path android:fillColor="#FF5F00" android:fillType="evenOdd" android:pathData="M49.65,58.6H70.35V21.4H49.65V58.6Z"/>
+      
+    <path android:fillColor="#F79E1B" android:fillType="evenOdd" android:pathData="M98.27,40C98.27,53.06 87.68,63.65 74.62,63.65C69.1,63.65 64.02,61.76 60,58.6C65.5,54.26 69.03,47.54 69.03,40C69.03,32.46 65.5,25.74 60,21.4C64.02,18.24 69.1,16.35 74.62,16.35C87.68,16.35 98.27,26.94 98.27,40Z"/>
+      
+    <path android:fillColor="#EB001B" android:fillType="evenOdd" android:pathData="M50.97,40C50.97,32.46 54.5,25.74 60,21.4C55.98,18.24 50.9,16.35 45.38,16.35C32.32,16.35 21.73,26.94 21.73,40C21.73,53.06 32.32,63.65 45.38,63.65C50.9,63.65 55.98,61.76 60,58.6C54.5,54.26 50.97,47.54 50.97,40Z"/>
+    
+</vector>

@@ -78,6 +78,9 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
 
         freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
         freeCompilerArgs.add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
+        freeCompilerArgs.add("-opt-in=DateTimeFormat.formatAsKotlinBuilderDsl")
+        freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
+        freeCompilerArgs.add("-opt-in=kotlinx.datetime.format.FormatStringsInDatetimeFormats")
         freeCompilerArgs.add("-opt-in=kotlinx.coroutines.FlowPreview")
         freeCompilerArgs.add("-opt-in=androidx.compose.material3.ExperimentalMaterial3Api")
         freeCompilerArgs.add("-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi")

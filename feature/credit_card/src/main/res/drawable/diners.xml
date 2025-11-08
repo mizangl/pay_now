@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2025 Martin Zangl
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<vector xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="80" android:viewportWidth="120" android:width="36dp">
+      
+    <path android:pathData="M4,0L116,0A4,4 0,0 1,120 4L120,76A4,4 0,0 1,116 80L4,80A4,4 0,0 1,0 76L0,4A4,4 0,0 1,4 0z">
+            
+        <aapt:attr name="android:fillColor">
+                  
+            <gradient android:endX="120" android:endY="54" android:startX="0" android:startY="21" android:type="linear">
+                        
+                <item android:color="#FF3479C0" android:offset="0"/>
+                        
+                <item android:color="#FF133362" android:offset="1"/>
+                      
+            </gradient>
+                
+        </aapt:attr>
+          
+    </path>
+      
+    <path android:fillColor="#3477B9" android:fillType="evenOdd" android:pathData="M65.4,64.83C79.02,64.9 91.45,53.76 91.45,40.22C91.45,25.4 79.02,15.16 65.4,15.17H53.68C39.89,15.16 28.55,25.4 28.55,40.22C28.55,53.77 39.89,64.9 53.68,64.83H65.4Z"/>
+      
+    <path android:fillColor="#ffffff" android:fillType="evenOdd" android:pathData="M53.69,17.15C41.09,17.16 30.88,27.33 30.88,39.89C30.88,52.45 41.09,62.62 53.69,62.62C66.28,62.62 76.49,52.45 76.5,39.89C76.49,27.33 66.28,17.16 53.69,17.15ZM39.23,39.89C39.24,33.75 43.09,28.52 48.51,26.44V53.34C43.09,51.26 39.24,46.03 39.23,39.89ZM58.86,53.34V26.44C64.28,28.51 68.14,33.75 68.15,39.89C68.14,46.03 64.28,51.26 58.86,53.34Z"/>
+    
+</vector>

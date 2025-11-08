@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.paynow.android.feature)
-    alias(libs.plugins.paynow.android.library.compose)
-    alias(libs.plugins.paynow.spotless)
-}
+package io.mz.checkout.creditcard.ui.component
 
-android {
-    namespace = "io.mz.checkout.paynow.creditcard"
-}
+object TestTags {
 
-dependencies {
-    implementation(project(":common"))
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.kotlinx.datetime)
+  object CreditCardForm {
+    const val CREDIT_CARD_FORM = "credit_card_form"
+  }
+  object CreditCardNumber {
+    const val OUTLINE_TEXT_FIELD = "outlined_text_field"
+  }
 }

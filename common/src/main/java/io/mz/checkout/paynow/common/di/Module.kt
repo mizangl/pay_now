@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.paynow.android.feature)
-    alias(libs.plugins.paynow.android.library.compose)
-    alias(libs.plugins.paynow.spotless)
-}
+package io.mz.checkout.paynow.common.di
 
-android {
-    namespace = "io.mz.checkout.paynow.creditcard"
-}
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-dependencies {
-    implementation(project(":common"))
+@Module
+@InstallIn(SingletonComponent::class)
+object Module {
 
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.kotlinx.datetime)
+  // TODO: refactor to a qualifier
+  @Provides
+  @Singleton
+  fun provideDispatcher(): CoroutineDispatcher {
+    return Dispatchers.IO
+  }
 }

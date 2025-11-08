@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2025 Martin Zangl
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="80" android:viewportWidth="120" android:width="36dp">
+      
+    <path android:fillColor="#fff" android:fillType="evenOdd" android:pathData="M44,0L116,0A4,4 0,0 1,120 4L120,76A4,4 0,0 1,116 80L44,80A4,4 0,0 1,40 76L40,4A4,4 0,0 1,44 0z"/>
+      
+    <path android:fillColor="#0690FF" android:pathData="m120,76v-8.68h-9.65l-4.97,-5.49 -4.99,5.49h-31.82v-25.61h-10.27l12.74,-28.83h12.29l4.39,9.88v-9.88h15.21l2.64,7.44 2.66,-7.44h11.79v-8.89c0,-2.21 -1.79,-4 -4,-4h-112c-2.21,0 -4,1.79 -4,4v72c0,2.21 1.79,4 4,4h112c2.21,0 4,-1.79 4,-4zM111.97,64.12h8.03l-10.62,-11.26 10.62,-11.13h-7.9l-6.56,7.16 -6.49,-7.16h-8.03l10.55,11.19 -10.55,11.19h7.8l6.59,-7.23 6.56,7.23zM113.85,52.87 L120,59.41v-13.03l-6.15,6.49zM78.07,58.94v-3.49h12.63v-5.05h-12.63v-3.49h12.95l0,-5.18h-19.06v22.39h19.06l-0,-5.18h-12.95zM113.96,38.48h6.05v-22.39h-9.4l-5.02,13.94 -4.99,-13.94h-9.56v22.39h6.04v-15.67l5.76,15.67h5.37l5.76,-15.7v15.7zM84.15,38.48h6.88l-9.88,-22.39h-7.87l-9.88,22.39h6.72l1.86,-4.48h10.3l1.89,4.48zM80.15,28.98h-6.08l3.04,-7.32 3.04,7.32z"/>
+    
+</vector>
