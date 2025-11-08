@@ -19,7 +19,6 @@ plugins {
     alias(libs.plugins.paynow.hilt)
     alias(libs.plugins.paynow.spotless)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -63,11 +62,18 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.androidx.navigation.testing)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)
 }
