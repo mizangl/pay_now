@@ -19,15 +19,10 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -48,14 +43,15 @@ fun PayNowNavHost(
     startDestination = CreditCardRoute,
     modifier = modifier
   ) {
-
     creditCardScreen(
       onPayClicked = { navController.navigate(Process) }
     )
 
     composable<Process> {
       AndroidView(
-        modifier = Modifier.fillMaxSize().testTag("webview"),
+        modifier = Modifier
+          .fillMaxSize()
+          .testTag("webview"),
         factory = {
           WebView(it).apply {
             layoutParams = ViewGroup.LayoutParams(
