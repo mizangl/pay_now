@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright 2025 Martin Zangl
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,4 +15,5 @@
 -->
 <resources>
     <string name="app_name">PayNow</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
