@@ -23,3 +23,5 @@ rootProject.name = "PayNow"
 include(":app")
 include(":common")
 include(":feature:credit_card")
+include(":feature:credit_card_verification")
+
