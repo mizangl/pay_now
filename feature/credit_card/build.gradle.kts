@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
 
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

@@ -77,6 +77,8 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
         allWarningsAsErrors.set(warningsAsError.toBoolean())
 
         freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
+        freeCompilerArgs.add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
+        freeCompilerArgs.add("-opt-in=kotlinx.coroutines.FlowPreview")
         freeCompilerArgs.add("-opt-in=androidx.compose.material3.ExperimentalMaterial3Api")
         freeCompilerArgs.add("-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi")
         freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")

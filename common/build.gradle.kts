@@ -15,7 +15,9 @@
  */
 plugins {
     alias(libs.plugins.paynow.android.library)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.paynow.spotless)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -24,5 +26,10 @@ android {
 }
 
 dependencies {
-   
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+
+    implementation(libs.androidx.annotation.jvm)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.coroutines.core)
 }
