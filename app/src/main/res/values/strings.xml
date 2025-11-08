@@ -16,5 +16,4 @@
 -->
 <resources>
     <string name="app_name">PayNow</string>
-    <string name="title_activity_main">MainActivity</string>
 </resources>
