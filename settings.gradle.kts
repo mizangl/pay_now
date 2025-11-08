@@ -1,7 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-include(":feature:credit_card")
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -23,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "PayNow"
 include(":app")
+include(":common")
+include(":feature:credit_card")
