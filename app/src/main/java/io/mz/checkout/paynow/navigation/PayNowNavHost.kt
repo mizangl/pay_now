@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Martin Zangl
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.mz.checkout.paynow.navigation
 
 import android.view.ViewGroup
@@ -23,58 +38,58 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun PayNowNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController,
+  modifier: Modifier = Modifier,
+  navController: NavHostController
 ) {
-
-    NavHost(
-        navController = navController,
-        startDestination = Main,
-        modifier = modifier
-    ) {
-
-        composable<Main>() {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Button(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(24.dp)
-                        .fillMaxWidth(),
-                    onClick = { navController.navigate(Process) }
-                ) {
-                    Text("Pay")
-                }
-            }
+  NavHost(
+    navController = navController,
+    startDestination = Main,
+    modifier = modifier
+  ) {
+    composable<Main> {
+      Box(
+        modifier = Modifier.fillMaxSize()
+      ) {
+        Button(
+          modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(24.dp)
+            .fillMaxWidth(),
+          onClick = { navController.navigate(Process) }
+        ) {
+          Text("Pay")
         }
-
-        composable<Process>() {
-            AndroidView(
-                modifier = Modifier.fillMaxSize().testTag("webview"),
-                factory = {
-                    WebView(it).apply {
-                        layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                        )
-                    }
-                }, update = {
-                    it.loadUrl("https://www.google.com")
-                })
-        }
-
-        composable<Result>(
-            deepLinks = listOf(
-                navDeepLink<Result>(basePath = "$uri/result")
-            )
-        ) { backStackEntry ->
-            val processResult = backStackEntry.toRoute<Result>().processResult
-            Box {
-                Text(processResult)
-            }
-        }
+      }
     }
+
+    composable<Process> {
+      AndroidView(
+        modifier = Modifier.fillMaxSize().testTag("webview"),
+        factory = {
+          WebView(it).apply {
+            layoutParams = ViewGroup.LayoutParams(
+              ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.MATCH_PARENT
+            )
+          }
+        },
+        update = {
+          it.loadUrl("https://www.google.com")
+        }
+      )
+    }
+
+    composable<Result>(
+      deepLinks = listOf(
+        navDeepLink<Result>(basePath = "$uri/result")
+      )
+    ) { backStackEntry ->
+      val processResult = backStackEntry.toRoute<Result>().processResult
+      Box {
+        Text(processResult)
+      }
+    }
+  }
 }
 
 @Serializable
