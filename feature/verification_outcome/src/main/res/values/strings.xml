@@ -15,6 +15,5 @@
      limitations under the License.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="verification_error" tools:ignore="ResourceName">Something went wrong</string>
-    <string name="navigate_back" tools:ignore="ResourceName">Try Again</string>
+    <string name="navigate_back" tools:ignore="ResourceName">Back</string>
 </resources>

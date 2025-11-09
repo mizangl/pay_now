@@ -14,7 +14,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="verification_error" tools:ignore="ResourceName">Something went wrong</string>
-    <string name="navigate_back" tools:ignore="ResourceName">Try Again</string>
-</resources>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+</manifest>
