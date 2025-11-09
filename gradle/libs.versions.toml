@@ -113,7 +113,6 @@ spotless-gradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plug
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

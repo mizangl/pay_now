@@ -22,6 +22,7 @@ import dagger.hilt.components.SingletonComponent
 import io.mz.checkout.creditcard.processor.api.TokenApi
 import io.mz.checkout.creditcard.processor.api.baseUrl
 import io.mz.checkout.creditcard.processor.interceptor.AuthInterceptor
+import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -36,7 +37,10 @@ object ApiModule {
 
   @Provides
   @Singleton
-  fun provideTokenApi(client: OkHttpClient, json: Json): TokenApi {
+  fun provideTokenApi(
+    @TokenClient client: OkHttpClient,
+    json: Json
+  ): TokenApi {
     return Retrofit.Builder()
       .client(client)
       .baseUrl(baseUrl)
@@ -47,23 +51,16 @@ object ApiModule {
 
   @Provides
   @Singleton
-  fun provideJson(): Json {
-    return Json {
-      encodeDefaults = true
-      ignoreUnknownKeys = true
-    }
-  }
-
-  @Provides
-  @Singleton
+  @TokenClient
   fun provideHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder()
-      .addInterceptor(AuthInterceptor())
-      .addNetworkInterceptor(
-        HttpLoggingInterceptor().apply {
-          level = HttpLoggingInterceptor.Level.BODY
-        }
-      )
-      .build()
+    return OkHttpClient.Builder().addNetworkInterceptor(
+      HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+      }
+    ).addInterceptor(AuthInterceptor()).build()
   }
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class TokenClient

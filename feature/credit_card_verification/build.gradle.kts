@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core:payment_processor"))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.material3)

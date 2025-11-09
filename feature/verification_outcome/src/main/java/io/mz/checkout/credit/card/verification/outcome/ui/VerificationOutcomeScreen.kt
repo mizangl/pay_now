@@ -17,22 +17,62 @@ package io.mz.checkout.credit.card.verification.outcome.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import io.mz.checkout.paynow.creditcard.verification.outcome.R
 
 @Composable
 fun OutcomeScreen(
   modifier: Modifier = Modifier,
-  outcomeText: String
+  outcomeText: String,
+  onBackPressed: () -> Unit = {}
 ) {
   Box(
-    modifier = Modifier.fillMaxSize()
+    modifier = Modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center
   ) {
-    Text(
-      modifier = Modifier.align(Alignment.Center),
-      text = outcomeText
-    )
+    when (outcomeText) {
+      "success" -> Text(text = "Approved")
+      "failure" -> Text(text = "Declined")
+    }
+
+    OutlinedButton(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .fillMaxWidth()
+        .align(Alignment.BottomCenter),
+      onClick = { onBackPressed() },
+      shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
+      colors = ButtonColors(
+        containerColor = Color.Black.copy(alpha = 0.9f),
+        contentColor = Color.White.copy(alpha = 0.9f),
+        disabledContentColor = Color.White.copy(alpha = 0.6f),
+        disabledContainerColor = Color.Black.copy(alpha = 0.4f)
+      )
+    ) {
+      Text(
+        text = stringResource(R.string.navigate_back),
+        textAlign = TextAlign.Center
+      )
+    }
   }
+}
+
+@Preview
+@Composable
+private fun OutcomeScreenPreview() {
+  OutcomeScreen(outcomeText = "success")
 }

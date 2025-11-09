@@ -37,12 +37,18 @@ fun PayNowNavHost(
   ) {
     creditCardScreen(
       onPayClicked = { token ->
-        navController.navigate(VerificationRoute(url = "https://www.google.com/"))
+        navController.navigate(VerificationRoute(token = token))
       }
     )
 
-    verificationScreen()
+    verificationScreen(
+      onBackPressed = {
+        navController.popBackStack()
+      }
+    )
 
-    outcomeScreen()
+    outcomeScreen(onBackPressed = {
+      navController.popBackStack()
+    })
   }
 }

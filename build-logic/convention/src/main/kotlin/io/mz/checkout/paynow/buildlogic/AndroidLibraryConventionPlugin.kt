@@ -19,7 +19,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             apply(plugin = "paynow.android.lint")
 
             extensions.configure<LibraryExtension> {
-
+                buildFeatures.buildConfig = true
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Configuration.TARGET_VERSION
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -22,6 +22,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,5 +33,14 @@ object Module {
   @Singleton
   fun provideDispatcher(): CoroutineDispatcher {
     return Dispatchers.IO
+  }
+
+  @Provides
+  @Singleton
+  fun provideJson(): Json {
+    return Json {
+      encodeDefaults = true
+      ignoreUnknownKeys = true
+    }
   }
 }

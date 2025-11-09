@@ -45,8 +45,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/feature_credit_card_verification_host"
-                    android:scheme="@string/feature_credit_card_verification_scheme" />
+                    android:host="callback-processing"
+                    android:scheme="paynow" />
             </intent-filter>
         </activity>
     </application>

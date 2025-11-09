@@ -15,25 +15,23 @@
  */
 package io.mz.checkout.creditcard.verification.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import io.mz.checkout.creditcard.verification.ui.VerificationScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VerificationRoute(val url: String)
+data class VerificationRoute(val token: String)
 
-fun NavController.navigateVerification(url: String, navOptions: NavOptions) =
-  navigate(VerificationRoute(url), navOptions)
-
-fun NavGraphBuilder.verificationScreen() {
+fun NavGraphBuilder.verificationScreen(
+  onBackPressed: () -> Unit = {}
+) {
   composable<VerificationRoute> { backStackEntry ->
-    val url = backStackEntry.toRoute<VerificationRoute>().url
+    val token = backStackEntry.toRoute<VerificationRoute>().token
     VerificationScreen(
-      verificationUrl = url
+      token = token,
+      onBackPressed = onBackPressed
     )
   }
 }

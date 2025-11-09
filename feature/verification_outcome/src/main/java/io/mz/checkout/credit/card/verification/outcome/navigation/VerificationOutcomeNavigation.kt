@@ -30,7 +30,9 @@ data class OutcomeRoute(val outcome: String)
 fun NavController.navigateToVerificationOutcome(outcome: String, navOptions: NavOptions) =
   navigate(OutcomeRoute, navOptions)
 
-fun NavGraphBuilder.outcomeScreen() {
+fun NavGraphBuilder.outcomeScreen(
+  onBackPressed: () -> Unit = {}
+) {
   composable<OutcomeRoute>(
     deepLinks = listOf(
       navDeepLink<OutcomeRoute>(basePath = "$uri/result")
@@ -38,10 +40,11 @@ fun NavGraphBuilder.outcomeScreen() {
   ) { backStackEntry ->
     val outcome = backStackEntry.toRoute<OutcomeRoute>().outcome
     OutcomeScreen(
-      outcomeText = outcome
+      outcomeText = outcome,
+      onBackPressed = onBackPressed
     )
   }
 }
 
 // temporary setup for URI
-val uri = "paynow://callback-processing"
+const val uri = "paynow://callback-processing"
