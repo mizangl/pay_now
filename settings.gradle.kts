@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":core:creditcard_processor")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {

@@ -29,7 +29,7 @@ fun NavController.navigateToCreditCard(navOptions: NavOptions) =
   navigate(CreditCardRoute, navOptions)
 
 fun NavGraphBuilder.creditCardScreen(
-  onPayClicked: () -> Unit = {}
+  onPayClicked: (String) -> Unit = {}
 ) {
   composable<CreditCardRoute> {
     CreditCardScreen(

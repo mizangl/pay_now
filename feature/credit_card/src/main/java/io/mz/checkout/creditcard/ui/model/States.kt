@@ -21,7 +21,9 @@ import androidx.compose.runtime.Stable
 data class FormState(
   val number: CreditCardNumberState = CreditCardNumberState(),
   val cvv: CreditCardCVVState = CreditCardCVVState(),
-  val date: CreditCardDateState = CreditCardDateState()
+  val date: CreditCardDateState = CreditCardDateState(),
+  val processError: String = "", // TODO
+  val isProcessing: Boolean = false
 ) {
 
   fun isValid(): Boolean {

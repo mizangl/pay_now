@@ -21,30 +21,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component1
 import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.component2
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.mz.checkout.creditcard.ui.component.CreditCardCVVTextField
 import io.mz.checkout.creditcard.ui.component.CreditCardDateTextField
 import io.mz.checkout.creditcard.ui.component.CreditCardNumberTextField
+import io.mz.checkout.creditcard.ui.component.CreditCardPayButton
 import io.mz.checkout.creditcard.ui.component.TestTags
 import io.mz.checkout.creditcard.ui.component.model.CardEntry
 import io.mz.checkout.creditcard.ui.component.rememberCreditCardNumberState
@@ -54,11 +51,13 @@ import io.mz.checkout.creditcard.ui.model.FormState
 fun CreditCardScreen(
   modifier: Modifier = Modifier,
   viewModel: CreditCardFormViewModel = hiltViewModel(),
-  onPayClicked: () -> Unit
+  onPayClicked: (String) -> Unit
 ) {
   val entries by viewModel.entries.collectAsStateWithLifecycle()
 
   val formState by viewModel.formState.collectAsStateWithLifecycle()
+
+  val submit = { viewModel.processForm(onPayClicked) }
 
   CreditCardForm(
     modifier = Modifier
@@ -71,7 +70,7 @@ fun CreditCardScreen(
     },
     onSelectedCvv = { value, active -> viewModel.updateCreditCardCVV(value, active) },
     onSelectedDate = { value, active -> viewModel.updateCreditCardDate(value, active) },
-    onPayClicked = onPayClicked
+    onPayClicked = submit
   )
 }
 
@@ -89,6 +88,8 @@ fun CreditCardForm(
 
   val focusManager = LocalFocusManager.current
 
+  val currentPayClicked by rememberUpdatedState(onPayClicked)
+
   Column(
     modifier = Modifier
       .padding(horizontal = 16.dp)
@@ -102,9 +103,12 @@ fun CreditCardForm(
       cardEntries = cardEntries
     )
 
+    val cvvTextFieldState = rememberTextFieldState()
+    val dateTextFieldState = rememberTextFieldState()
+
     CreditCardNumberTextField(
       modifier = Modifier.fillMaxWidth(),
-      onNextClicked = { },
+      onNextClicked = { focusRequesterDate.requestFocus() },
       onFocusChanged = onSelectedCardEntry,
       creditCardNumberState = creditCardNumberState,
       errors = formState().number.errors
@@ -119,8 +123,9 @@ fun CreditCardForm(
         modifier = Modifier
           .weight(1f)
           .focusRequester(focusRequesterDate),
+        textFieldState = dateTextFieldState,
         errors = formState().date.errors,
-        onNextClicked = { },
+        onNextClicked = { focusRequesterCVV.requestFocus() },
         onFocusChanged = onSelectedDate // onFocusChangedDate,
       )
 
@@ -128,6 +133,7 @@ fun CreditCardForm(
         modifier = Modifier
           .weight(1f)
           .focusRequester(focusRequesterCVV),
+        textFieldState = cvvTextFieldState,
         errors = formState().cvv.errors,
         onDoneClicked = { focusManager.clearFocus() },
         onFocusChanged = onSelectedCvv,
@@ -135,30 +141,28 @@ fun CreditCardForm(
       )
     }
 
+    if (formState().processError.isNotEmpty()) {
+      Text(
+        text = formState().processError
+      )
+    }
+
     Spacer(
       modifier = Modifier.weight(1f)
     )
 
-    // TODO refactor as a component
-    OutlinedButton(
+    CreditCardPayButton(
       modifier = Modifier
         .align(Alignment.CenterHorizontally)
         .fillMaxWidth(),
-      onClick = { },
-      shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
-      colors = ButtonColors(
-        containerColor = Color.Black.copy(alpha = 0.9f),
-        contentColor = Color.White.copy(alpha = 0.9f),
-        disabledContentColor = Color.White.copy(alpha = 0.6f),
-        disabledContainerColor = Color.Black.copy(alpha = 0.4f)
-      ),
-      enabled = formState().payButtonEnabled()
-    ) {
-      Text(
-        "Pay",
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.headlineMedium
-      )
-    }
+      formState = { formState() },
+      currentPayClicked = {
+        // workaround for tapping pay button after updating fields
+        onSelectedCvv(cvvTextFieldState.text.toString(), true)
+        onSelectedDate(dateTextFieldState.text.toString(), true)
+        //
+        currentPayClicked()
+      }
+    )
   }
 }

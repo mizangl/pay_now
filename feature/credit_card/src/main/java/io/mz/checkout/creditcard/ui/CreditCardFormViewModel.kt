@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.mz.checkout.creditcard.data.repository.CardsRepository
+import io.mz.checkout.creditcard.processor.entity.request.TokenRequest
+import io.mz.checkout.creditcard.processor.repository.TokenRepository
 import io.mz.checkout.creditcard.ui.component.model.CardEntry
 import io.mz.checkout.creditcard.ui.model.CardEntryMapper.toCardEntryList
 import io.mz.checkout.creditcard.ui.model.CreditCardModel
@@ -33,10 +35,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CreditCardFormViewModel @Inject constructor(
-  private val cardsRepository: CardsRepository
+  private val cardsRepository: CardsRepository,
+  private val tokenRepository: TokenRepository
 ) : ViewModel() {
 
   val cards: StateFlow<List<CreditCardModel>> = flow {
@@ -66,19 +70,22 @@ class CreditCardFormViewModel @Inject constructor(
           id = entry.id,
           cvvLength = entry.cvvLength,
           errors = errors
-        )
+        ),
+        processError = ""
       )
     }
   }
 
   fun updateCreditCardCVV(cvv: String, active: Boolean) {
-    val errors = if (active) emptyList() else validateCreditCardCVV(cvv, formState.value.number.id)
+    val errors =
+      if (active) emptyList() else validateCreditCardCVV(cvv, formState.value.number.id)
     formState.update {
       it.copy(
         cvv = it.cvv.copy(
           cvv = cvv,
           errors = errors
-        )
+        ),
+        processError = ""
       )
     }
   }
@@ -90,7 +97,8 @@ class CreditCardFormViewModel @Inject constructor(
         date = it.date.copy(
           expireAt = expireAt,
           errors = errors
-        )
+        ),
+        processError = ""
       )
     }
   }
@@ -119,6 +127,42 @@ class CreditCardFormViewModel @Inject constructor(
     } ?: emptyList()
   }
 
-  fun processForm() {
+  fun processForm(proceed: (String) -> Unit) {
+    viewModelScope.launch {
+      formState.update {
+        it.copy(isProcessing = true)
+      }
+
+      val number = formState.value.number.number
+      val cvv = formState.value.cvv.cvv
+
+      val (month, year) = formState.value.date.expireAt.split("/").let { split ->
+        if (split.size == 2) {
+          split[0] to split[1]
+        } else {
+          "" to ""
+        }
+      }
+
+      val token = tokenRepository.fetchToken(
+        TokenRequest(
+          number = number,
+          cvv = cvv,
+          expiryMonth = month,
+          expiryYear = year
+        )
+      ).token
+
+      if (token.isNotEmpty()) {
+        proceed(token)
+      } else {
+        formState.update {
+          it.copy(processError = "Something went wrong")
+        }
+      }
+      formState.update {
+        it.copy(isProcessing = false)
+      }
+    }
   }
 }

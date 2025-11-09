@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -44,19 +45,18 @@ fun CreditCardDateTextField(
   @StringRes placeholder: Int = 0,
   defaultPlaceHolder: Boolean = true,
   errors: List<Int> = emptyList(),
+  textFieldState: TextFieldState = rememberTextFieldState(),
   isError: Boolean = false,
   onFocusChanged: (String, Boolean) -> Unit = { _, _ -> },
   onNextClicked: () -> Unit = {}
 ) {
-  val state = rememberTextFieldState()
-
   val currentOnFocusChanged by rememberUpdatedState(onFocusChanged)
 
   OutlinedTextField(
     modifier = modifier.onFocusChanged { focusState ->
-      currentOnFocusChanged(state.text.toString(), focusState.isFocused)
+      currentOnFocusChanged(textFieldState.text.toString(), focusState.isFocused)
     },
-    state = state,
+    state = textFieldState,
     isError = errors.isNotEmpty(),
     supportingText = @Composable {
       TextFieldError(errors = errors)

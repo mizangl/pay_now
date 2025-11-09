@@ -16,7 +16,7 @@
 package io.mz.checkout.creditcard.data
 
 import io.mz.checkout.creditcard.data.entity.CardContainer
-import io.mz.checkout.creditcard.data.repository.safe
+import io.mz.checkout.paynow.common.utils.safe
 import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream

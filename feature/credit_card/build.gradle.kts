@@ -25,6 +25,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":core:creditcard_processor"))
 
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)

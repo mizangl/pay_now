@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.then
@@ -52,13 +53,12 @@ fun CreditCardCVVTextField(
   @StringRes placeholder: Int = 0,
   defaultPlaceHolder: Boolean = true,
   isError: Boolean = false,
+  textFieldState: TextFieldState = rememberTextFieldState(),
   errors: List<Int> = emptyList(),
   cvvLength: () -> Int = { 3 },
   onFocusChanged: (String, Boolean) -> Unit = { _, _ -> },
   onDoneClicked: () -> Unit = {}
 ) {
-  val textFieldState = rememberTextFieldState()
-
   var showCode by remember { mutableStateOf(false) }
 
   val currentOnFocusChanged by rememberUpdatedState(onFocusChanged)

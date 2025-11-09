@@ -76,7 +76,11 @@ fun CreditCardNumberTextField(
   OutlinedTextField(
     modifier = modifier
       .onFocusChanged { focusState ->
-        currentOnFocusChanged(creditCardNumberState.value.toString(), entry, focusState.isFocused)
+        currentOnFocusChanged(
+          creditCardNumberState.value.toString(),
+          entry,
+          focusState.isFocused
+        )
       }
       .testTag(TestTags.CreditCardNumber.OUTLINE_TEXT_FIELD),
     isError = errors.isNotEmpty(),

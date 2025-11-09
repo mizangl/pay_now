@@ -36,7 +36,7 @@ fun PayNowNavHost(
     modifier = modifier
   ) {
     creditCardScreen(
-      onPayClicked = {
+      onPayClicked = { token ->
         navController.navigate(VerificationRoute(url = "https://www.google.com/"))
       }
     )
