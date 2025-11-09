@@ -13,8 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mz.checkout.creditcard.data.repository
+plugins {
+    alias(libs.plugins.paynow.android.feature)
+    alias(libs.plugins.paynow.spotless)
+}
 
-inline fun <reified T> safe(block: () -> T): Result<T> {
-  return runCatching { block() }
+android {
+    namespace = "io.mz.checkout.paynow.creditcard.processor"
+
+}
+dependencies {
+    implementation(project(":common"))
+
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.annotation.jvm)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.retrofit.core)
+    implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.datetime)
 }
