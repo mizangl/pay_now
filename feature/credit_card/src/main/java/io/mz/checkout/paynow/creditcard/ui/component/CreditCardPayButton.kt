@@ -30,6 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.mz.checkout.paynow.creditcard.ui.model.FormState
 
+/**
+ * Composable for triggering payment actions in a credit card form.
+ *
+ * @param modifier Modifier to be applied to the button for layout or styling.
+ * @param currentPayClicked A callback triggered when the button is clicked.
+ * @param formState A function returning the current state of the form.
+ */
 @Composable
 fun CreditCardPayButton(
   modifier: Modifier = Modifier,

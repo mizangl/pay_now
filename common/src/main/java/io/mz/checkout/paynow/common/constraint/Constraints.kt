@@ -35,6 +35,16 @@ interface Constraint<out T> {
   val value: T
 
   companion object {
+
+    /**
+     * Validates a given value against a list of constraints and returns a list of error messages
+     * represented as resource IDs for the constraints that the value fails to satisfy.
+     *
+     * @param T The type of value being validated.
+     * @param constraints A list of constraints to validate the value against.
+     * @param value The value to be validated.
+     * @return A list of resource IDs representing error messages for the violated constraints.
+     */
     inline fun <reified T> validate(
       constraints: List<Constraint<T>>,
       value: T

@@ -48,6 +48,18 @@ The project is organized into multiple Gradle modules:
 - build-logic
   - Convention plugins for Android/Kotlin configuration used by modules (Compose, Hilt, Lint, Testing, Spotless, etc.)
 
+```mermaid
+graph LR
+  A[":app"] --> B[":feature:credit_card"]
+  A --> C[":feature:credit_card_verification"]
+  A --> D[":feature:verification_outcome"]
+  B --> E[":common"]
+  B --> F[":core:creditcard_processor"]
+  C --> G[":core:payment_processor"]
+  F --> E
+  G --> E
+```
+
 Key files you may want to open first:
 - app/src/main/java/io/mz/checkout/paynow/PayNowApp.kt – App root Composable
 - app/src/main/java/io/mz/checkout/paynow/navigation/PayNowNavHost.kt – Navigation graph

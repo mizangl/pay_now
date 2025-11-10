@@ -40,6 +40,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 
+/**
+ * Composable that creates an input field for entering a credit card expiration date.
+ *
+ * @param modifier The modifier to be applied to the input field.
+ * @param placeholder A string resource ID representing the placeholder text. Default value is 0 (no custom placeholder).
+ * @param defaultPlaceHolder A flag indicating whether to use a default placeholder. Default is true.
+ * @param errors A list of string resource IDs indicating error messages to display. Default is an empty list.
+ * @param textFieldState The state object for the text field.
+ * @param isError A flag indicating whether an error state should be displayed. Default is false.
+ * @param onFocusChanged A callback triggered when the focus state changes, passing the current text value and focus state.
+ * @param onNextClicked A callback triggered when the keyboard action is performed.
+ */
 @Composable
 fun CreditCardDateTextField(
   modifier: Modifier = Modifier,

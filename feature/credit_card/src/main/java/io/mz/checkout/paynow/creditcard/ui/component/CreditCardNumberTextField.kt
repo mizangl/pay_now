@@ -57,7 +57,17 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-// TODO
+/**
+ * Composable that provides a text field specifically for entering credit card numbers.
+ *
+ * @param isError Boolean flag to indicate whether the text field is in an error state.
+ * @param errors A list of string resource IDs representing error messages.
+ * @param placeholder Resource ID for the placeholder text displayed when the field is empty. Defaults to 0 (no placeholder).
+ * @param showPlaceHolder Boolean flag to indicate whether to show the default placeholder.
+ * @param creditCardNumberState The state object managing the credit card number input.
+ * @param onFocusChanged Callback invoked when the text field gains or loses focus.
+ * @param onNextClicked Callback invoked when the "Next" keyboard action.
+ */
 @Composable
 fun CreditCardNumberTextField(
   modifier: Modifier = Modifier,

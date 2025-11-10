@@ -37,6 +37,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * @property cardsRepository The repository used for fetching and managing credit card information.
+ * @property tokenRepository The repository used for fetching a token.
+ *
+ * Functionality:
+ * - Maintains a state flow for the list of credit card models.
+ * - Provides a state flow for the form state.
+ * - Validates credit card number, CVV, and expiration date based on associated constraints.
+ */
 @HiltViewModel
 class CreditCardFormViewModel @Inject constructor(
   private val cardsRepository: CardsRepository,

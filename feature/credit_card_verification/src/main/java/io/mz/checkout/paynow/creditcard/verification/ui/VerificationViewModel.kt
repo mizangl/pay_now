@@ -33,6 +33,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ *
+ * This ViewModel provides state management for the verification process
+ *
+ * @property paymentRepository Handles payment processing by communicating with the appropriate data source.
+ * @property configurationRepository Provides configuration for success and failure URLs.
+ */
 @HiltViewModel
 class VerificationViewModel @Inject constructor(
   private val paymentRepository: PaymentProcessorRepository,
