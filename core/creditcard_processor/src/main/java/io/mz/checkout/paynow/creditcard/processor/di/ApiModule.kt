@@ -37,7 +37,7 @@ object ApiModule {
 
   @Provides
   @Singleton
-  fun provideTokenApi(
+  fun provideProcessorApi(
     @TokenClient client: OkHttpClient,
     json: Json
   ): TokenApi {

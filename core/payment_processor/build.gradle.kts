@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -66,4 +65,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.datetime)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.androidx.test.runner)
+
 }

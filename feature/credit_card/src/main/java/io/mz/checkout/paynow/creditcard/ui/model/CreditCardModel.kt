@@ -16,8 +16,8 @@
 package io.mz.checkout.paynow.creditcard.ui.model
 
 import androidx.compose.runtime.Stable
-import io.mz.checkout.paynow.creditcard.ui.component.model.CardEntry
 import io.mz.checkout.paynow.common.constraint.Constraint
+import io.mz.checkout.paynow.creditcard.ui.component.model.CardEntry
 
 @Stable
 data class CreditCardModel(

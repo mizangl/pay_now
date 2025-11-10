@@ -15,74 +15,101 @@
  */
 package io.mz.checkout.paynow
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.testing.TestNavHostController
-import io.mz.checkout.paynow.navigation.PayNowNavHost
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
+import androidx.test.core.app.ApplicationProvider
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import io.mz.checkout.paynow.creditcard.ui.component.TestTags as CreditCardFormTestTags
+import io.mz.checkout.paynow.creditcard.verification.outcome.ui.TestTags as VerificationTestTags
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@HiltAndroidTest
 class AppNavigationTest {
 
-  @get:Rule
-  val composeRule = createComposeRule()
-  lateinit var navController: TestNavHostController
+  @get:Rule(order = 0)
+  val hiltRule = HiltAndroidRule(this)
+
+  @get:Rule(order = 1)
+  val composeRule = createAndroidComposeRule<MainActivity>()
+
+  private val context: Context = ApplicationProvider.getApplicationContext()
+
+  private val numberField = composeRule.onNodeWithTag(
+    CreditCardFormTestTags.CreditCardNumber.CREDIT_CARD_FIELD
+  )
+  private val dateField = composeRule.onNodeWithTag(
+    CreditCardFormTestTags.CreditCardDate.CREDIT_CARD_FIELD
+  )
+  private val cvvField = composeRule.onNodeWithTag(
+    CreditCardFormTestTags.CreditCardCVV.CREDIT_CARD_FIELD
+  )
+  private val payNowButton = composeRule.onNodeWithTag(
+    CreditCardFormTestTags.CreditCardPayButton.CREDIT_CARD_FIELD
+  )
+
+  private val outcomeField = composeRule.onNodeWithTag(
+    VerificationTestTags.VerificationOutcomeScreen.OUTCOME_RESULT
+  )
 
   @Before
   fun setup() {
-    composeRule.setContent {
-      navController = TestNavHostController(LocalContext.current)
-      navController.navigatorProvider.addNavigator(ComposeNavigator())
-      PayNowNavHost(navController = navController)
-    }
+    hiltRule.inject()
   }
 
   @Test
-  fun payNowNavHost_mainStartDestination() {
-    composeRule.onNodeWithText("Pay").assertIsDisplayed()
-  }
+  fun payNow_successFlow() {
+    val creditCardNumber = "4242424242424242"
+    val date = "122026"
+    val cvv = "1234"
+    numberField.isDisplayed()
+    numberField.performTextInput(creditCardNumber)
+    dateField.performTextInput(date)
+    cvvField.performTextInput(cvv)
+    cvvField.performImeAction()
 
-  @Test
-  fun payNowNavHost_navigateTo3dsProcessing() {
-    composeRule.onNodeWithText("Pay").performClick()
-    composeRule.onNodeWithTag("webview").assertIsDisplayed()
-  }
-
-  @Test
-  fun payNowNavHost_interceptSuccessDeepLink() {
-    composeRule.onNodeWithText("Pay").performClick()
-    composeRule.onNodeWithTag("webview").assertIsDisplayed()
+    payNowButton.performClick()
 
     val deepLinkUri = Uri.parse("paynow://callback-processing/result/success")
     val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
 
-    composeRule.runOnUiThread {
-      navController.handleDeepLink(intent)
+    composeRule.activityRule.scenario.onActivity {
+      it.startActivity(intent)
     }
 
-    composeRule.onNodeWithText("success").assertIsDisplayed()
+    outcomeField.assertTextEquals("APPROVED")
   }
 
   @Test
-  fun payNowNavHost_interceptFailureDeepLink() {
-    composeRule.onNodeWithText("Pay").performClick()
-    composeRule.onNodeWithTag("webview").assertIsDisplayed()
+  fun payNow_FailureFlow() {
+    val creditCardNumber = "4242424242424242"
+    val date = "122026"
+    val cvv = "1234"
+    numberField.isDisplayed()
+    numberField.performTextInput(creditCardNumber)
+    dateField.performTextInput(date)
+    cvvField.performTextInput(cvv)
+    cvvField.performImeAction()
+
+    payNowButton.performClick()
 
     val deepLinkUri = Uri.parse("paynow://callback-processing/result/failure")
     val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
 
-    composeRule.runOnUiThread {
-      navController.handleDeepLink(intent)
+    composeRule.activityRule.scenario.onActivity {
+      it.startActivity(intent)
     }
 
-    composeRule.onNodeWithText("failure").assertIsDisplayed()
+    outcomeField.assertTextEquals("DECLINED")
   }
 }

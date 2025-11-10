@@ -20,7 +20,6 @@ import io.mz.checkout.paynow.common.constraint.Constraint
 import io.mz.checkout.paynow.common.constraint.Constraints
 import io.mz.checkout.paynow.creditcard.R
 import kotlin.time.Clock
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 
 @Constraints<String>(validator = LuhnValidator::class)
@@ -39,8 +38,6 @@ val DefaultDateConstraint = DateConstraint()
 
 @Constraints<String>(validator = DateValidator::class)
 class DateConstraint : Constraint<String> {
-  private val timeZone = TimeZone.UTC
-
   override fun getErrorMessage(): Int = R.string.feature_credit_card_expired_error
 
   override val value: String

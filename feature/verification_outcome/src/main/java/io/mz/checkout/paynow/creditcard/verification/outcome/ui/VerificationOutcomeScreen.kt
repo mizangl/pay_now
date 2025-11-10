@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,10 +45,12 @@ fun OutcomeScreen(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
-    when (outcomeText) {
-      "success" -> Text(text = "Approved")
-      "failure" -> Text(text = "Declined")
-    }
+    OutcomeText(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
+      outcomeText = outcomeText
+    )
 
     OutlinedButton(
       modifier = Modifier
@@ -69,6 +72,16 @@ fun OutcomeScreen(
       )
     }
   }
+}
+
+@Composable
+fun OutcomeText(modifier: Modifier = Modifier, outcomeText: String) {
+  val text = when (outcomeText) {
+    "success" -> stringResource(R.string.result_approved)
+    "failure" -> stringResource(R.string.result_declined)
+    else -> stringResource(id = R.string.result_declined)
+  }
+  Text(modifier = modifier, text = text)
 }
 
 @Preview

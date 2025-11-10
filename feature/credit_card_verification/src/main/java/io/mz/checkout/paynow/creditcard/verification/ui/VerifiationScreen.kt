@@ -45,10 +45,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.mz.checkout.paynow.creditcard.verification.R
 import io.mz.checkout.paynow.creditcard.verification.ui.model.VerificationFailure
 import io.mz.checkout.paynow.creditcard.verification.ui.model.VerificationInProgress
 import io.mz.checkout.paynow.creditcard.verification.ui.model.VerificationSuccess
-import io.mz.checkout.paynow.creditcard.verification.R
 
 @Composable
 fun VerificationScreen(

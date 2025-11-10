@@ -21,6 +21,22 @@ object TestTags {
     const val CREDIT_CARD_FORM = "credit_card_form"
   }
   object CreditCardNumber {
-    const val OUTLINE_TEXT_FIELD = "outlined_text_field"
+    const val CREDIT_CARD_FIELD = "credit_card_number"
+    const val OUTLINE_TEXT_FIELD = "number_outlined_text_field"
+  }
+
+  object CreditCardCVV {
+    const val CREDIT_CARD_FIELD = "credit_card_cvv"
+    const val OUTLINE_TEXT_FIELD = "cvv_outlined_text_field"
+  }
+
+  object CreditCardDate {
+    const val CREDIT_CARD_FIELD = "credit_card_date"
+    const val OUTLINE_TEXT_FIELD = "date_outlined_text_field"
+  }
+
+  object CreditCardPayButton {
+    const val CREDIT_CARD_FIELD = "credit_card_pay_button"
+    const val OUTLINED_BUTTON = "outlined_button"
   }
 }

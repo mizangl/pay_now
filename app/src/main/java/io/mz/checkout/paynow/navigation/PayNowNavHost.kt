@@ -19,11 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import io.mz.checkout.paynow.creditcard.verification.outcome.navigation.outcomeScreen
 import io.mz.checkout.paynow.creditcard.navigation.CreditCardRoute
 import io.mz.checkout.paynow.creditcard.navigation.creditCardScreen
 import io.mz.checkout.paynow.creditcard.verification.navigation.VerificationRoute
 import io.mz.checkout.paynow.creditcard.verification.navigation.verificationScreen
+import io.mz.checkout.paynow.creditcard.verification.outcome.navigation.outcomeScreen
 
 @Composable
 fun PayNowNavHost(

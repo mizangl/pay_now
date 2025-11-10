@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,7 +56,7 @@ fun CreditCardDateTextField(
   OutlinedTextField(
     modifier = modifier.onFocusChanged { focusState ->
       currentOnFocusChanged(textFieldState.text.toString(), focusState.isFocused)
-    },
+    }.testTag(TestTags.CreditCardDate.OUTLINE_TEXT_FIELD),
     state = textFieldState,
     isError = errors.isNotEmpty(),
     supportingText = @Composable {

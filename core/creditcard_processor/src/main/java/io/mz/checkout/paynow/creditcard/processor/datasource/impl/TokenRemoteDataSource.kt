@@ -15,11 +15,11 @@
  */
 package io.mz.checkout.paynow.creditcard.processor.datasource.impl
 
+import io.mz.checkout.paynow.common.utils.safe
 import io.mz.checkout.paynow.creditcard.processor.api.TokenApi
 import io.mz.checkout.paynow.creditcard.processor.datasource.TokenDataSource
 import io.mz.checkout.paynow.creditcard.processor.entity.request.TokenRequest
 import io.mz.checkout.paynow.creditcard.processor.entity.response.TokenResponse
-import io.mz.checkout.paynow.common.utils.safe
 import javax.inject.Inject
 
 class TokenRemoteDataSource @Inject constructor(

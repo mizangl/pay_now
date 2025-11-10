@@ -53,7 +53,7 @@ data class FormState(
 data class CreditCardNumberState(
   val number: String = "",
   val id: Long = 0,
-  val cvvLength: Int = 0,
+  val cvvLength: Int = 4,
   val errors: List<Int> = emptyList()
 )
 

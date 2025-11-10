@@ -25,7 +25,7 @@ import javax.inject.Inject
 class ProcessorRemoteDataSource @Inject constructor(
   private val api: PaymentProcessorApi
 ) : ProcessorDataSource {
-  override suspend fun fetchToken(payload: ProcessorRequest): Result<PaymentProcessorResponse> {
+  override suspend fun processAuth(payload: ProcessorRequest): Result<PaymentProcessorResponse> {
     return safe {
       api.fetchToken(payload)
     }

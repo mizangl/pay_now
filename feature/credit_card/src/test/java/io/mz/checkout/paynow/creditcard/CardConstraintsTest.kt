@@ -15,9 +15,10 @@
  */
 package io.mz.checkout.paynow.creditcard
 
+import io.mz.checkout.paynow.common.constraint.Constraint
 import io.mz.checkout.paynow.creditcard.ui.model.DateConstraint
 import io.mz.checkout.paynow.creditcard.ui.model.DefaultDateConstraint
-import io.mz.checkout.paynow.common.constraint.Constraint
+import io.mz.checkout.paynow.creditcard.ui.model.MaxLengthConstraint
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -39,5 +40,25 @@ class CardConstraintsTest {
       Constraint.validate(value = "11/2026", constraints = listOf(DefaultDateConstraint))
 
     assertTrue(errors.isEmpty())
+  }
+
+  @Test
+  fun `test card cvv constraint match`() {
+    val constraint = MaxLengthConstraint(3)
+
+    val errors =
+      Constraint.validate(value = "123".length, constraints = listOf(constraint))
+
+    assertTrue(errors.isEmpty())
+  }
+
+  @Test
+  fun `test card cvv constraint does not match`() {
+    val constraint = MaxLengthConstraint(3)
+
+    val errors =
+      Constraint.validate(value = "1".length, constraints = listOf(constraint))
+
+    assertTrue(errors.isNotEmpty())
   }
 }

@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         applicationId = "io.mz.checkout.paynow"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "io.mz.checkout.paynow.runner.PayNowTestRunner"
     }
 
     buildTypes {
@@ -58,6 +58,8 @@ android {
             )
         }
     }
+
+    testOptions.animationsDisabled = true
 }
 
 dependencies {
@@ -77,8 +79,6 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-
-
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
@@ -86,6 +86,11 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.retrofit.core)
+
+    androidTestImplementation(project(":core:creditcard_processor"))
+    androidTestImplementation(project(":core:payment_processor"))
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)

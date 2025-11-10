@@ -25,6 +25,6 @@ class PaymentProcessorRepositoryImpl @Inject constructor(
   private val processorDataSource: ProcessorDataSource
 ) : PaymentProcessorRepository {
   override suspend fun processAuth(payload: ProcessorRequest): Result<PaymentProcessorResponse> {
-    return processorDataSource.fetchToken(payload)
+    return processorDataSource.processAuth(payload)
   }
 }

@@ -41,6 +41,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,7 +67,7 @@ fun CreditCardCVVTextField(
   OutlinedTextField(
     modifier = modifier.onFocusChanged { focusState ->
       currentOnFocusChanged(textFieldState.text.toString(), focusState.isFocused)
-    },
+    }.testTag(TestTags.CreditCardCVV.OUTLINE_TEXT_FIELD),
     state = textFieldState,
     isError = isError || errors.isNotEmpty(),
     supportingText = @Composable {

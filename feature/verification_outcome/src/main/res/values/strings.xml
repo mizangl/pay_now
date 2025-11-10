@@ -15,5 +15,8 @@
      limitations under the License.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="result_approved" tools:ignore="ResourceName">APPROVED</string>
+    <string name="result_declined" tools:ignore="ResourceName">DECLINED</string>
+    <string name="result_error" tools:ignore="ResourceName">ERROR</string>
     <string name="navigate_back" tools:ignore="ResourceName">Back</string>
 </resources>

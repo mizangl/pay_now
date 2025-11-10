@@ -18,6 +18,7 @@ package io.mz.checkout.paynow.creditcard.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.mz.checkout.paynow.common.constraint.Constraint
 import io.mz.checkout.paynow.creditcard.data.repository.CardsRepository
 import io.mz.checkout.paynow.creditcard.processor.entity.request.TokenRequest
 import io.mz.checkout.paynow.creditcard.processor.repository.TokenRepository
@@ -26,7 +27,6 @@ import io.mz.checkout.paynow.creditcard.ui.model.CardEntryMapper.toCardEntryList
 import io.mz.checkout.paynow.creditcard.ui.model.CreditCardModel
 import io.mz.checkout.paynow.creditcard.ui.model.DefaultDateConstraint
 import io.mz.checkout.paynow.creditcard.ui.model.FormState
-import io.mz.checkout.paynow.common.constraint.Constraint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

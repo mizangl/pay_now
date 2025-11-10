@@ -15,8 +15,8 @@
  */
 plugins {
     alias(libs.plugins.paynow.android.library)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.paynow.spotless)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -34,4 +34,6 @@ dependencies {
     implementation(libs.androidx.annotation.jvm)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlinx.coroutines.core)
+
+    androidTestImplementation(libs.androidx.test.runner)
 }

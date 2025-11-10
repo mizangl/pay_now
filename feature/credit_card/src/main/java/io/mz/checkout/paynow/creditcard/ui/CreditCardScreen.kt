@@ -35,6 +35,8 @@ import androidx.compose.ui.focus.FocusRequester.Companion.FocusRequesterFactory.
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -107,7 +109,8 @@ fun CreditCardForm(
     val dateTextFieldState = rememberTextFieldState()
 
     CreditCardNumberTextField(
-      modifier = Modifier.fillMaxWidth(),
+      modifier = Modifier.fillMaxWidth()
+        .semantics(true) { testTag = TestTags.CreditCardNumber.CREDIT_CARD_FIELD },
       onNextClicked = { focusRequesterDate.requestFocus() },
       onFocusChanged = onSelectedCardEntry,
       creditCardNumberState = creditCardNumberState,
@@ -122,7 +125,8 @@ fun CreditCardForm(
       CreditCardDateTextField(
         modifier = Modifier
           .weight(1f)
-          .focusRequester(focusRequesterDate),
+          .focusRequester(focusRequesterDate)
+          .semantics(true) { testTag = TestTags.CreditCardDate.CREDIT_CARD_FIELD },
         textFieldState = dateTextFieldState,
         errors = formState().date.errors,
         onNextClicked = { focusRequesterCVV.requestFocus() },
@@ -132,7 +136,8 @@ fun CreditCardForm(
       CreditCardCVVTextField(
         modifier = Modifier
           .weight(1f)
-          .focusRequester(focusRequesterCVV),
+          .focusRequester(focusRequesterCVV)
+          .semantics(true) { testTag = TestTags.CreditCardCVV.CREDIT_CARD_FIELD },
         textFieldState = cvvTextFieldState,
         errors = formState().cvv.errors,
         onDoneClicked = { focusManager.clearFocus() },
@@ -154,7 +159,8 @@ fun CreditCardForm(
     CreditCardPayButton(
       modifier = Modifier
         .align(Alignment.CenterHorizontally)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .semantics(true) { testTag = TestTags.CreditCardPayButton.CREDIT_CARD_FIELD },
       formState = { formState() },
       currentPayClicked = {
         // workaround for tapping pay button after updating fields

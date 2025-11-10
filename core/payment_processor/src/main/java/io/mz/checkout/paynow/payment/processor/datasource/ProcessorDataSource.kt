@@ -20,5 +20,5 @@ import io.mz.checkout.paynow.payment.processor.entity.processor.response.Payment
 
 interface ProcessorDataSource {
 
-  suspend fun fetchToken(payload: ProcessorRequest): Result<PaymentProcessorResponse>
+  suspend fun processAuth(payload: ProcessorRequest): Result<PaymentProcessorResponse>
 }
