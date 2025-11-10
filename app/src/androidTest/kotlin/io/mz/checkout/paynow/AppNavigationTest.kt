@@ -15,25 +15,31 @@
  */
 package io.mz.checkout.paynow
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mz.checkout.paynow.creditcard.ui.component.TestTags as CreditCardFormTestTags
 import io.mz.checkout.paynow.creditcard.verification.outcome.ui.TestTags as VerificationTestTags
+import io.mz.checkout.paynow.di.FakePaymentProcessorApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalTestApi::class)
 @HiltAndroidTest
 class AppNavigationTest {
 
@@ -43,7 +49,7 @@ class AppNavigationTest {
   @get:Rule(order = 1)
   val composeRule = createAndroidComposeRule<MainActivity>()
 
-  private val context: Context = ApplicationProvider.getApplicationContext()
+  private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
   private val numberField = composeRule.onNodeWithTag(
     CreditCardFormTestTags.CreditCardNumber.CREDIT_CARD_FIELD
@@ -62,13 +68,17 @@ class AppNavigationTest {
     VerificationTestTags.VerificationOutcomeScreen.OUTCOME_RESULT
   )
 
+  private val webviewComponent = hasTestTag("webview")
+
   @Before
   fun setup() {
     hiltRule.inject()
   }
 
+  @OptIn(ExperimentalTestApi::class)
   @Test
   fun payNow_successFlow() {
+    FakePaymentProcessorApi.url = "file:///android_asset/success_web_content.html"
     val creditCardNumber = "4242424242424242"
     val date = "122026"
     val cvv = "1234"
@@ -80,18 +90,15 @@ class AppNavigationTest {
 
     payNowButton.performClick()
 
-    val deepLinkUri = Uri.parse("paynow://callback-processing/result/success")
-    val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
-
-    composeRule.activityRule.scenario.onActivity {
-      it.startActivity(intent)
-    }
+    mockWebView()
 
     outcomeField.assertTextEquals("APPROVED")
   }
 
   @Test
   fun payNow_FailureFlow() {
+    FakePaymentProcessorApi.url = "file:///android_asset/failure_web_content.html"
+
     val creditCardNumber = "4242424242424242"
     val date = "122026"
     val cvv = "1234"
@@ -103,13 +110,16 @@ class AppNavigationTest {
 
     payNowButton.performClick()
 
-    val deepLinkUri = Uri.parse("paynow://callback-processing/result/failure")
-    val intent = Intent(Intent.ACTION_VIEW, deepLinkUri)
-
-    composeRule.activityRule.scenario.onActivity {
-      it.startActivity(intent)
-    }
+    mockWebView()
 
     outcomeField.assertTextEquals("DECLINED")
+  }
+
+  @OptIn(ExperimentalTestApi::class)
+  private fun mockWebView() {
+    composeRule.waitUntilNodeCount(webviewComponent, 1, 500)
+
+    device.wait(Until.hasObject(By.text("click here")), 500)
+    device.findObject(By.text("click here")).click()
   }
 }

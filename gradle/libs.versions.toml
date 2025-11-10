@@ -38,6 +38,7 @@ composeBom = "2024.09.00"
 annotationJvm = "1.9.1"
 mockitoKotlin = "6.1.0"
 mockitoAndroid = "5.20.0"
+uiautomator = "2.3.0"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -107,6 +108,7 @@ androidx-lint-gradle = { group = "androidx.lint", name = "lint-gradle", version.
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version = "6.1.0" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version = "5.20.0" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

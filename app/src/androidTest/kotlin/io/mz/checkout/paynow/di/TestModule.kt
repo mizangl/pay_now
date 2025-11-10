@@ -38,6 +38,21 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 
+object FakePaymentProcessorApi : PaymentProcessorApi {
+  var url: String = ""
+  override suspend fun fetchToken(body: ProcessorRequest): PaymentProcessorResponse {
+    return PaymentProcessorResponse(
+      status = "success",
+      id = "id",
+      links = Links(
+        self = Self(href = "href"),
+        actions = Link(href = "href"),
+        redirect = Link(href = url)
+      )
+    )
+  }
+}
+
 @Module
 @TestInstallIn(
   components = [SingletonComponent::class],
@@ -51,7 +66,8 @@ object TestModule {
     @ProcessorClient client: OkHttpClient,
     json: Json
   ): PaymentProcessorApi {
-    return object : PaymentProcessorApi {
+    return FakePaymentProcessorApi
+    /*return object : PaymentProcessorApi {
       override suspend fun fetchToken(body: ProcessorRequest): PaymentProcessorResponse {
         return PaymentProcessorResponse(
           status = "success",
@@ -63,7 +79,7 @@ object TestModule {
           )
         )
       }
-    }
+    }*/
   }
 
   @Provides
