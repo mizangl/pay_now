@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mz.checkout.paynow.creditcard.processor.api
+package io.mz.checkout.paynow.dispatcher.flow
 
-import io.mz.checkout.paynow.creditcard.processor.entity.request.TokenRequest
-import io.mz.checkout.paynow.creditcard.processor.entity.response.TokenResponse
-import retrofit2.http.Body
-import retrofit2.http.POST
+import kotlinx.serialization.Serializable
 
-interface TokenApi {
-
-  @POST("/tokens")
-  suspend fun fetchToken(@Body body: TokenRequest): TokenResponse
-}
+@Serializable
+data class JsonFlow(
+  val step: Int,
+  val path: String,
+  val method: String = "GET",
+  val headers: Map<String, String> = emptyMap(),
+  val body: String = "",
+  val code: Int = 201
+)

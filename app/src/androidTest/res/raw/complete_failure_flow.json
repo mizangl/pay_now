@@ -1,0 +1,16 @@
+[
+  {
+    "step": 1,
+    "path": "/tokens",
+    "method": "POST",
+    "body": "{\n  \"expiry_month\": 12,\n  \"expiry_year\": 2030,\n  \"bin\": \"45442491\",\n  \"last4\": \"3670\",\n  \"scheme\": \"VISA\",\n  \"card_type\": \"CREDIT\",\n  \"card_category\": \"CONSUMER\",\n  \"issuer\": \"HSBC BANK PLC\",\n  \"issuer_country\": \"GB\",\n  \"product_type\": \"CLASSIC\",\n  \"fingerprint\": \"AB684E530D5630E5D87B0660951B61875382D50B9FCBBC18DE0CEC3F9372E293\",\n  \"token\": \"tok_i6mvx3shgmjupl5gms63klmkxi\",\n  \"type\": \"card\",\n  \"expires_on\": \"2025-11-11T09:23:15.0490758Z\"\n}",
+    "code": 201
+  },
+  {
+    "step": 2,
+    "path": "/payments",
+    "method": "POST",
+    "body": "{\n\"id\": \"pay_xkhrxoqqgygeheef2yf4fus2ji\",\n\"status\": \"Pending\",\n\"3ds\": {\n\"downgraded\": false,\n\"enrolled\": \"Y\"\n},\n\"_links\": {\n\"self\": {\n\"href\": \"https://api.sandbox.checkout.com/payments/pay_xkhrxoqqgygeheef2yf4fus2ji\"\n},\n\"actions\": {\n\"href\": \"https://api.sandbox.checkout.com/payments/pay_xkhrxoqqgygeheef2yf4fus2ji/actions\"\n},\n\"redirect\": {\n\"href\": \"file:///android_asset/failure_web_content.html\"\n}\n}\n}",
+    "code": 202
+  }
+]

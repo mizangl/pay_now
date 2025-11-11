@@ -15,8 +15,6 @@
  */
 package io.mz.checkout.paynow
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
@@ -34,7 +32,9 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mz.checkout.paynow.creditcard.ui.component.TestTags as CreditCardFormTestTags
 import io.mz.checkout.paynow.creditcard.verification.outcome.ui.TestTags as VerificationTestTags
-import io.mz.checkout.paynow.di.FakePaymentProcessorApi
+import io.mz.checkout.paynow.dispatcher.FlowDispatcher
+import mockwebserver3.MockWebServer
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,6 +48,8 @@ class AppNavigationTest {
 
   @get:Rule(order = 1)
   val composeRule = createAndroidComposeRule<MainActivity>()
+
+  private val testContext = InstrumentationRegistry.getInstrumentation().context
 
   private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -70,15 +72,29 @@ class AppNavigationTest {
 
   private val webviewComponent = hasTestTag("webview")
 
+  private val server = MockWebServer()
+
   @Before
   fun setup() {
     hiltRule.inject()
+    server.start(8080)
+  }
+
+  @After
+  fun tearDown() {
+    server.close()
   }
 
   @OptIn(ExperimentalTestApi::class)
   @Test
   fun payNow_successFlow() {
-    FakePaymentProcessorApi.url = "file:///android_asset/success_web_content.html"
+    server.dispatcher = FlowDispatcher().apply {
+      build(
+        context = testContext,
+        io.mz.checkout.paynow.test.R.raw.complete_success_flow
+      )
+    }
+
     val creditCardNumber = "4242424242424242"
     val date = "122026"
     val cvv = "1234"
@@ -97,11 +113,16 @@ class AppNavigationTest {
 
   @Test
   fun payNow_FailureFlow() {
-    FakePaymentProcessorApi.url = "file:///android_asset/failure_web_content.html"
-
+    server.dispatcher = FlowDispatcher().apply {
+      build(
+        context = testContext,
+        io.mz.checkout.paynow.test.R.raw.complete_failure_flow
+      )
+    }
     val creditCardNumber = "4242424242424242"
     val date = "122026"
     val cvv = "1234"
+
     numberField.isDisplayed()
     numberField.performTextInput(creditCardNumber)
     dateField.performTextInput(date)
