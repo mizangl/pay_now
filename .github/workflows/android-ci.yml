@@ -31,10 +31,6 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Accept Android SDK licenses
-        shell: bash
-        run: yes | sdkmanager --licenses >/dev/null
-
       - name: Install required Android packages
         shell: bash
         run: |
