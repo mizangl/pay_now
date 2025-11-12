@@ -19,11 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 21
+          distribution: corretto
+          java-version: 17
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -62,24 +62,17 @@ jobs:
       - name: Run unit tests (JVM/Android unit tests only)
         run: ./gradlew test --stacktrace --no-daemon
 
-      - name: Reset ADB (prevent offline state)
-        shell: bash
+      - name: Enable KVM
         run: |
-          adb kill-server || true
-          adb start-server || true
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
-      - name: Run connected Android tests (instrumentation)
+      - name: Run Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
-        timeout-minutes: 30
         with:
-          api-level: 34
-          arch: x86_64
-          target: google_apis
-          force-avd-creation: true
-          disable-animations: true
-          emulator-boot-timeout: 1200
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none -camera-front none -noaudio
-          script: ./gradlew connectedCheck --stacktrace --no-daemon
+          api-level: 35
+          script: ./gradlew connectedCheck
 
       - name: Assemble APK/AAB (post-tests)
         run: ./gradlew assemble --stacktrace --no-daemon
