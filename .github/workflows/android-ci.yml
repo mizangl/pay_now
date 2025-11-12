@@ -62,15 +62,23 @@ jobs:
       - name: Run unit tests (JVM/Android unit tests only)
         run: ./gradlew test --stacktrace --no-daemon
 
+      - name: Reset ADB (prevent offline state)
+        shell: bash
+        run: |
+          adb kill-server || true
+          adb start-server || true
+
       - name: Run connected Android tests (instrumentation)
         uses: reactivecircus/android-emulator-runner@v2
+        timeout-minutes: 30
         with:
           api-level: 34
           arch: x86_64
           target: google_apis
-          force-avd-creation: false
+          force-avd-creation: true
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot
+          emulator-boot-timeout: 1200
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none -camera-front none -noaudio
           script: ./gradlew connectedCheck --stacktrace --no-daemon
 
       - name: Assemble APK/AAB (post-tests)
