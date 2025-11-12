@@ -59,8 +59,8 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Build (assemble + unit tests)
-        run: ./gradlew build --stacktrace --no-daemon
+      - name: Run unit tests (JVM/Android unit tests only)
+        run: ./gradlew test --stacktrace --no-daemon
 
       - name: Run connected Android tests (instrumentation)
         uses: reactivecircus/android-emulator-runner@v2
@@ -72,6 +72,9 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot
           script: ./gradlew connectedCheck --stacktrace --no-daemon
+
+      - name: Assemble APK/AAB (post-tests)
+        run: ./gradlew assemble --stacktrace --no-daemon
 
       - name: Upload Android test reports
         if: always()
