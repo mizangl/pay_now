@@ -23,12 +23,15 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.Converter
+import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
 object Module {
 
-  // TODO: refactor to a qualifier
   @Provides
   @Singleton
   fun provideDispatcher(): CoroutineDispatcher {
@@ -42,5 +45,28 @@ object Module {
       encodeDefaults = true
       ignoreUnknownKeys = true
     }
+  }
+
+  @Provides
+  @Singleton
+  fun provideConverterFactory(json: Json): Converter.Factory {
+    return json.asConverterFactory("application/json".toMediaType())
+  }
+
+  @Provides
+  @Singleton
+  fun provideRetrofit(
+    baseUrl: String,
+    converterFactory: Converter.Factory
+  ): Retrofit.Builder {
+    return Retrofit.Builder()
+      .baseUrl(baseUrl)
+      .addConverterFactory(converterFactory)
+  }
+
+  @Provides
+  @Singleton
+  fun provideApi(): String {
+    return "https://api.sandbox.checkout.com"
   }
 }

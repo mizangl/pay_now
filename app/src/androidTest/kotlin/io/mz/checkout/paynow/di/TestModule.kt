@@ -22,21 +22,15 @@ import dagger.hilt.testing.TestInstallIn
 import io.mz.checkout.paynow.creditcard.processor.api.TokenApi
 import io.mz.checkout.paynow.creditcard.processor.di.ApiModule as ApiModuleCreditCardProcessor
 import io.mz.checkout.paynow.creditcard.processor.di.TokenClient
-import io.mz.checkout.paynow.creditcard.processor.entity.request.TokenRequest
-import io.mz.checkout.paynow.creditcard.processor.entity.response.TokenResponse
 import io.mz.checkout.paynow.creditcard.processor.interceptor.AuthInterceptor as CreditCardProcessorAuthInterceptor
+import io.mz.checkout.paynow.dispatcher.MOCK_SERVER
 import io.mz.checkout.paynow.payment.processor.api.PaymentProcessorApi
 import io.mz.checkout.paynow.payment.processor.di.ApiModule as ApiModulePaymentProcessor
 import io.mz.checkout.paynow.payment.processor.di.ProcessorClient
-import io.mz.checkout.paynow.payment.processor.entity.processor.request.ProcessorRequest
-import io.mz.checkout.paynow.payment.processor.entity.processor.response.Link
-import io.mz.checkout.paynow.payment.processor.entity.processor.response.Links
-import io.mz.checkout.paynow.payment.processor.entity.processor.response.PaymentProcessorResponse
-import io.mz.checkout.paynow.payment.processor.entity.processor.response.Self
 import io.mz.checkout.paynow.payment.processor.interceptor.AuthInterceptor as PaymentProcessorAuthInterceptor
 import javax.inject.Singleton
-import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
+import retrofit2.Retrofit
 
 @Module
 @TestInstallIn(
@@ -49,21 +43,12 @@ object TestModule {
   @Singleton
   fun provideTokenApi(
     @ProcessorClient client: OkHttpClient,
-    json: Json
+    retrofit: Retrofit.Builder
   ): PaymentProcessorApi {
-    return object : PaymentProcessorApi {
-      override suspend fun fetchToken(body: ProcessorRequest): PaymentProcessorResponse {
-        return PaymentProcessorResponse(
-          status = "success",
-          id = "id",
-          links = Links(
-            self = Self(href = "href"),
-            actions = Link(href = "href"),
-            redirect = Link(href = "href")
-          )
-        )
-      }
-    }
+    return retrofit.baseUrl(MOCK_SERVER)
+      .client(client)
+      .build()
+      .create((PaymentProcessorApi::class.java))
   }
 
   @Provides
@@ -77,13 +62,12 @@ object TestModule {
   @Singleton
   fun provideProcessorApi(
     @TokenClient client: OkHttpClient,
-    json: Json
+    retrofit: Retrofit.Builder
   ): TokenApi {
-    return object : TokenApi {
-      override suspend fun fetchToken(body: TokenRequest): TokenResponse {
-        return TokenResponse("token")
-      }
-    }
+    return retrofit.baseUrl(MOCK_SERVER)
+      .client(client)
+      .build()
+      .create((TokenApi::class.java))
   }
 
   @Provides

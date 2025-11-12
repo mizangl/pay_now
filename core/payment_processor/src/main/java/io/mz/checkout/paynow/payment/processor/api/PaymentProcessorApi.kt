@@ -25,5 +25,3 @@ interface PaymentProcessorApi {
   @POST("/payments")
   suspend fun fetchToken(@Body body: ProcessorRequest): PaymentProcessorResponse
 }
-
-const val baseUrl = "https://api.sandbox.checkout.com"
