@@ -88,9 +88,12 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.retrofit.core)
+    androidTestImplementation(libs.retrofit.kotlin.serialization)
 
     androidTestImplementation(project(":core:creditcard_processor"))
     androidTestImplementation(project(":core:payment_processor"))
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.mockwebserver3)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)

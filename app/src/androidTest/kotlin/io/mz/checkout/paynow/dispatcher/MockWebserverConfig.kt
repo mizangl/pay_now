@@ -13,15 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mz.checkout.paynow.creditcard.processor.api
+package io.mz.checkout.paynow.dispatcher
 
-import io.mz.checkout.paynow.creditcard.processor.entity.request.TokenRequest
-import io.mz.checkout.paynow.creditcard.processor.entity.response.TokenResponse
-import retrofit2.http.Body
-import retrofit2.http.POST
-
-interface TokenApi {
-
-  @POST("/tokens")
-  suspend fun fetchToken(@Body body: TokenRequest): TokenResponse
-}
+const val MOCK_SERVER = "http://localhost:8080"

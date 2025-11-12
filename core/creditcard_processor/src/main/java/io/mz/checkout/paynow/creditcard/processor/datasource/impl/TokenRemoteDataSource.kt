@@ -28,6 +28,8 @@ class TokenRemoteDataSource @Inject constructor(
   override suspend fun fetchToken(payload: TokenRequest): TokenResponse {
     return safe {
       api.fetchToken(payload)
+    }.onFailure {
+      print(it)
     }.getOrDefault(TokenResponse(""))
   }
 }

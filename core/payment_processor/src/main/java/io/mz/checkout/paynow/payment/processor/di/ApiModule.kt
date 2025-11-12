@@ -20,16 +20,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.mz.checkout.paynow.payment.processor.api.PaymentProcessorApi
-import io.mz.checkout.paynow.payment.processor.api.baseUrl
 import io.mz.checkout.paynow.payment.processor.interceptor.AuthInterceptor
 import javax.inject.Qualifier
 import javax.inject.Singleton
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,14 +35,9 @@ object ApiModule {
   @Singleton
   fun provideTokenApi(
     @ProcessorClient client: OkHttpClient,
-    json: Json
+    retrofit: Retrofit.Builder
   ): PaymentProcessorApi {
-    return Retrofit.Builder()
-      .client(client)
-      .baseUrl(baseUrl)
-      .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-      .build()
-      .create(PaymentProcessorApi::class.java)
+    return retrofit.client(client).build().create(PaymentProcessorApi::class.java)
   }
 
   @Provides
