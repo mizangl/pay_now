@@ -51,113 +51,105 @@ import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorSucce
 
 @Composable
 fun OutcomeScreen(
-  modifier: Modifier = Modifier,
-  outcomeText: String,
-  onBackPressed: () -> Unit = {}
+    modifier: Modifier = Modifier,
+    outcomeText: String,
+    onBackPressed: () -> Unit = {}
 ) {
-  Box(
-    modifier = Modifier.fillMaxSize(),
-    contentAlignment = Alignment.Center
-  ) {
-    OutcomeText(
-      modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
-      outcomeText = outcomeText
-    )
-
-    OutlinedButton(
-      modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .fillMaxWidth()
-        .align(Alignment.BottomCenter),
-      onClick = { onBackPressed() },
-      shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
-      colors = ButtonColors(
-        containerColor = Color.Black.copy(alpha = 0.9f),
-        contentColor = Color.White.copy(alpha = 0.9f),
-        disabledContentColor = Color.White.copy(alpha = 0.6f),
-        disabledContainerColor = Color.Black.copy(alpha = 0.4f)
-      )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-      Text(
-        text = stringResource(R.string.navigate_back),
-        textAlign = TextAlign.Center
-      )
+        OutcomeText(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
+            outcomeText = outcomeText
+        )
+
+        OutlinedButton(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            onClick = { onBackPressed() },
+            shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
+            colors = ButtonColors(
+                containerColor = Color.Black.copy(alpha = 0.9f),
+                contentColor = Color.White.copy(alpha = 0.9f),
+                disabledContentColor = Color.White.copy(alpha = 0.6f),
+                disabledContainerColor = Color.Black.copy(alpha = 0.4f)
+            )
+        ) {
+            Text(
+                text = stringResource(R.string.navigate_back),
+                textAlign = TextAlign.Center
+            )
+        }
     }
-  }
 }
 
 @Composable
 fun OutcomeText(modifier: Modifier = Modifier, outcomeText: String) {
-  val isSuccess = outcomeText.equals("success", ignoreCase = true)
-  val isFailure = outcomeText.equals("failure", ignoreCase = true)
-  val color = when {
-    isSuccess -> ColorSuccess
-    isFailure -> ColorFailure
-    else -> Color(0xFFF44336)
-  }
+    val isSuccess = outcomeText.equals("success", ignoreCase = true)
+    val isFailure = outcomeText.equals("failure", ignoreCase = true)
+    val color = when {
+        isSuccess -> ColorSuccess
+        isFailure -> ColorFailure
+        else -> ColorFailure
+    }
 
-  val transition = rememberInfiniteTransition(label = "pulse")
-  val scale by transition.animateFloat(
-    initialValue = 0.9f,
-    targetValue = 1.1f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
-      repeatMode = RepeatMode.Reverse
-    ),
-    label = "pulseScale"
-  )
+    val transition = rememberInfiniteTransition(label = "pulse")
+    val scale by transition.animateFloat(
+        initialValue = 0.9f,
+        targetValue = 1.1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulseScale"
+    )
 
-  val label = when {
-    isSuccess -> stringResource(R.string.result_approved)
-    isFailure -> stringResource(R.string.result_declined)
-    else -> stringResource(id = R.string.result_declined)
-  }
+    val label = when {
+        isSuccess -> stringResource(R.string.result_approved)
+        isFailure -> stringResource(R.string.result_declined)
+        else -> stringResource(id = R.string.result_declined)
+    }
 
-  OutcomeContent(modifier, scale, color, isSuccess, label)
+    OutcomeContent(modifier, scale, color, isSuccess, label)
 }
 
 @Composable
 private fun OutcomeContent(
-  modifier: Modifier,
-  scale: Float,
-  color: Color,
-  isSuccess: Boolean,
-  label: String
+    modifier: Modifier,
+    scale: Float,
+    color: Color,
+    isSuccess: Boolean,
+    label: String
 ) {
-  Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-    Box(contentAlignment = Alignment.Center) {
-      Canvas(modifier = Modifier.size(160.dp)) {
-        val radius = (size.minDimension / 2f) * scale
-        drawCircle(color = color.copy(alpha = 0.25f), radius = radius)
-        drawCircle(color = color, radius = size.minDimension / 2f * 0.9f)
-      }
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(contentAlignment = Alignment.Center) {
+            Canvas(modifier = Modifier.size(160.dp)) {
+                val radius = (size.minDimension / 2f) * scale
+                drawCircle(color = color.copy(alpha = 0.25f), radius = radius)
+                drawCircle(color = color, radius = size.minDimension / 2f * 0.9f)
+            }
 
-      if (isSuccess) {
-        Text(
-          "\u2713",
-          color = Color.White,
-          style = MaterialTheme.typography.headlineLarge,
-          textAlign = TextAlign.Center
-        )
-      } else {
-        Text(
-          "\u2715",
-          color = Color.White,
-          style = MaterialTheme.typography.headlineLarge,
-          textAlign = TextAlign.Center
-        )
-      }
+            val iconChar = if (isSuccess) "\u2713" else "\u2715"
+            Text(
+                iconChar,
+                color = Color.White,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(text = label, textAlign = TextAlign.Center, color = color)
     }
-
-    Spacer(modifier = Modifier.height(24.dp))
-    Text(text = label, textAlign = TextAlign.Center, color = color)
-  }
 }
 
 @Preview
 @Composable
 private fun OutcomeScreenPreview() {
-  OutcomeScreen(outcomeText = "success")
+    OutcomeScreen(outcomeText = "success")
 }
