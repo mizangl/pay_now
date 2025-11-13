@@ -15,16 +15,28 @@
  */
 package io.mz.checkout.paynow.creditcard.verification.outcome.ui
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +46,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.mz.checkout.paynow.creditcard.verification.outcome.R
+import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorFailure
+import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorSuccess
 
 @Composable
 fun OutcomeScreen(
@@ -76,12 +90,70 @@ fun OutcomeScreen(
 
 @Composable
 fun OutcomeText(modifier: Modifier = Modifier, outcomeText: String) {
-  val text = when (outcomeText) {
-    "success" -> stringResource(R.string.result_approved)
-    "failure" -> stringResource(R.string.result_declined)
+  val isSuccess = outcomeText.equals("success", ignoreCase = true)
+  val isFailure = outcomeText.equals("failure", ignoreCase = true)
+  val color = when {
+    isSuccess -> ColorSuccess
+    isFailure -> ColorFailure
+    else -> Color(0xFFF44336)
+  }
+
+  val transition = rememberInfiniteTransition(label = "pulse")
+  val scale by transition.animateFloat(
+    initialValue = 0.9f,
+    targetValue = 1.1f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+      repeatMode = RepeatMode.Reverse
+    ),
+    label = "pulseScale"
+  )
+
+  val label = when {
+    isSuccess -> stringResource(R.string.result_approved)
+    isFailure -> stringResource(R.string.result_declined)
     else -> stringResource(id = R.string.result_declined)
   }
-  Text(modifier = modifier, text = text)
+
+  OutcomeContent(modifier, scale, color, isSuccess, label)
+}
+
+@Composable
+private fun OutcomeContent(
+  modifier: Modifier,
+  scale: Float,
+  color: Color,
+  isSuccess: Boolean,
+  label: String
+) {
+  Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Box(contentAlignment = Alignment.Center) {
+      Canvas(modifier = Modifier.size(160.dp)) {
+        val radius = (size.minDimension / 2f) * scale
+        drawCircle(color = color.copy(alpha = 0.25f), radius = radius)
+        drawCircle(color = color, radius = size.minDimension / 2f * 0.9f)
+      }
+
+      if (isSuccess) {
+        Text(
+          "\u2713",
+          color = Color.White,
+          style = MaterialTheme.typography.headlineLarge,
+          textAlign = TextAlign.Center
+        )
+      } else {
+        Text(
+          "\u2715",
+          color = Color.White,
+          style = MaterialTheme.typography.headlineLarge,
+          textAlign = TextAlign.Center
+        )
+      }
+    }
+
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(text = label, textAlign = TextAlign.Center, color = color)
+  }
 }
 
 @Preview
