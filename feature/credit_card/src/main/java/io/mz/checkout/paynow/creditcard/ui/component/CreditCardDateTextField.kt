@@ -30,8 +30,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
@@ -63,12 +61,12 @@ fun CreditCardDateTextField(
   onFocusChanged: (String, Boolean) -> Unit = { _, _ -> },
   onNextClicked: () -> Unit = {}
 ) {
-  val currentOnFocusChanged by rememberUpdatedState(onFocusChanged)
-
   OutlinedTextField(
-    modifier = modifier.onFocusChanged { focusState ->
-      currentOnFocusChanged(textFieldState.text.toString(), focusState.isFocused)
-    }.testTag(TestTags.CreditCardDate.OUTLINE_TEXT_FIELD),
+    modifier = modifier
+      .onFocusChanged { focusState ->
+        onFocusChanged(textFieldState.text.toString(), focusState.isFocused)
+      }
+      .testTag(TestTags.CreditCardDate.OUTLINE_TEXT_FIELD),
     state = textFieldState,
     isError = errors.isNotEmpty(),
     supportingText = @Composable {

@@ -34,14 +34,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -81,13 +79,10 @@ fun CreditCardNumberTextField(
 ) {
   val entry by creditCardNumberState.currentEntry.collectAsStateWithLifecycle()
 
-  val currentOnFocusChanged by rememberUpdatedState(onFocusChanged)
-  val currentOnNextClicked by rememberUpdatedState(onNextClicked)
-
   OutlinedTextField(
     modifier = modifier
       .onFocusChanged { focusState ->
-        currentOnFocusChanged(
+        onFocusChanged(
           creditCardNumberState.value.toString(),
           entry,
           focusState.isFocused
@@ -125,7 +120,7 @@ fun CreditCardNumberTextField(
       imeAction = ImeAction.Next
     ),
     onKeyboardAction = {
-      currentOnNextClicked()
+      onNextClicked()
     }
   )
 }
