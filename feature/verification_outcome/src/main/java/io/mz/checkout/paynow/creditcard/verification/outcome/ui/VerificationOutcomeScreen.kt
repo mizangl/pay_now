@@ -15,11 +15,9 @@
  */
 package io.mz.checkout.paynow.creditcard.verification.outcome.ui
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -29,17 +27,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,108 +53,154 @@ import androidx.compose.ui.unit.dp
 import io.mz.checkout.paynow.creditcard.verification.outcome.R
 import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorFailure
 import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorSuccess
+import kotlin.math.PI
+import kotlin.math.sin
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun OutcomeScreen(
-    modifier: Modifier = Modifier,
-    outcomeText: String,
-    onBackPressed: () -> Unit = {}
+  modifier: Modifier = Modifier,
+  outcomeText: String,
+  onBackPressed: () -> Unit = {}
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        OutcomeText(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
-            outcomeText = outcomeText
-        )
+  val isSuccess = outcomeText.equals("success", ignoreCase = true)
+  val isFailure = outcomeText.equals("failure", ignoreCase = true)
+  val color = when {
+    isSuccess -> ColorSuccess
+    isFailure -> ColorFailure
+    else -> ColorFailure
+  }
 
-        OutlinedButton(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-            onClick = { onBackPressed() },
-            shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
-            colors = ButtonColors(
-                containerColor = Color.Black.copy(alpha = 0.9f),
-                contentColor = Color.White.copy(alpha = 0.9f),
-                disabledContentColor = Color.White.copy(alpha = 0.6f),
-                disabledContainerColor = Color.Black.copy(alpha = 0.4f)
-            )
-        ) {
-            Text(
-                text = stringResource(R.string.navigate_back),
-                textAlign = TextAlign.Center
-            )
-        }
+  val fillProgress = remember { Animatable(0f) }
+  val wavePhase = remember { Animatable(0f) }
+  LaunchedEffect(Unit) {
+    coroutineScope {
+      launch {
+        fillProgress.animateTo(
+          targetValue = 1f,
+          animationSpec = tween(durationMillis = 2200, easing = FastOutSlowInEasing)
+        )
+      }
+      launch {
+        wavePhase.animateTo(
+          targetValue = (2f * PI).toFloat(),
+          animationSpec = tween(durationMillis = 1200, easing = LinearEasing)
+        )
+      }
     }
+  }
+
+  var containerTopPx by remember { mutableFloatStateOf(0f) }
+  var backTopPx by remember { mutableFloatStateOf(Float.NaN) }
+
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .onGloballyPositioned { coords ->
+        containerTopPx = coords.positionInRoot().y
+      },
+    contentAlignment = Alignment.Center
+  ) {
+    Canvas(modifier = Modifier.matchParentSize()) {
+      val bottom = if (backTopPx.isNaN()) size.height else backTopPx.coerceIn(0f, size.height)
+      if (bottom > 0f) {
+        clipRect(left = 0f, top = 0f, right = size.width, bottom = bottom) {
+          val amplitude = size.height * 0.06f
+          val wavelength = size.width / 1.2f
+          val baselineY = (bottom * (1f - fillProgress.value)).coerceIn(0f, bottom)
+
+          val wave = Path().apply {
+            moveTo(0f, bottom)
+            lineTo(0f, baselineY)
+            var x = 0f
+            val step = size.width / 40f
+            while (x <= size.width + step) {
+              val phase: Double =
+                (2.0 * PI * (x.toDouble() / wavelength.toDouble())) + wavePhase.value.toDouble()
+              val y = (baselineY - amplitude * sin(phase)).toFloat()
+              lineTo(x.coerceAtMost(size.width), y)
+              x += step
+            }
+            lineTo(size.width, bottom)
+            close()
+          }
+          drawPath(path = wave, color = color)
+        }
+      }
+    }
+
+    OutcomeText(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
+      outcomeText = outcomeText
+    )
+
+    OutlinedButton(
+      modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .fillMaxWidth()
+        .align(Alignment.BottomCenter)
+        .onGloballyPositioned { coords ->
+          val buttonTopInRoot = coords.positionInRoot().y
+          backTopPx = (buttonTopInRoot - containerTopPx)
+        },
+      onClick = { onBackPressed() },
+      shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
+      colors = ButtonColors(
+        containerColor = Color.Black.copy(alpha = 0.9f),
+        contentColor = Color.White.copy(alpha = 0.9f),
+        disabledContentColor = Color.White.copy(alpha = 0.6f),
+        disabledContainerColor = Color.Black.copy(alpha = 0.4f)
+      )
+    ) {
+      Text(
+        text = stringResource(R.string.navigate_back),
+        textAlign = TextAlign.Center
+      )
+    }
+  }
 }
 
 @Composable
 fun OutcomeText(modifier: Modifier = Modifier, outcomeText: String) {
-    val isSuccess = outcomeText.equals("success", ignoreCase = true)
-    val isFailure = outcomeText.equals("failure", ignoreCase = true)
-    val color = when {
-        isSuccess -> ColorSuccess
-        isFailure -> ColorFailure
-        else -> ColorFailure
-    }
+  val isSuccess = outcomeText.equals("success", ignoreCase = true)
+  val isFailure = outcomeText.equals("failure", ignoreCase = true)
 
-    val transition = rememberInfiniteTransition(label = "pulse")
-    val scale by transition.animateFloat(
-        initialValue = 0.9f,
-        targetValue = 1.1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulseScale"
-    )
+  val label = when {
+    isSuccess -> stringResource(R.string.result_approved)
+    isFailure -> stringResource(R.string.result_declined)
+    else -> stringResource(id = R.string.result_declined)
+  }
 
-    val label = when {
-        isSuccess -> stringResource(R.string.result_approved)
-        isFailure -> stringResource(R.string.result_declined)
-        else -> stringResource(id = R.string.result_declined)
-    }
-
-    OutcomeContent(modifier, scale, color, isSuccess, label)
+  OutcomeContent(modifier, isSuccess, label)
 }
 
 @Composable
 private fun OutcomeContent(
-    modifier: Modifier,
-    scale: Float,
-    color: Color,
-    isSuccess: Boolean,
-    label: String
+  modifier: Modifier,
+  isSuccess: Boolean,
+  label: String
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(contentAlignment = Alignment.Center) {
-            Canvas(modifier = Modifier.size(160.dp)) {
-                val radius = (size.minDimension / 2f) * scale
-                drawCircle(color = color.copy(alpha = 0.25f), radius = radius)
-                drawCircle(color = color, radius = size.minDimension / 2f * 0.9f)
-            }
-
-            val iconChar = if (isSuccess) "\u2713" else "\u2715"
-            Text(
-                iconChar,
-                color = Color.White,
-                style = MaterialTheme.typography.headlineLarge,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(text = label, textAlign = TextAlign.Center, color = color)
+  Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Box(contentAlignment = Alignment.Center) {
+      val iconChar = if (isSuccess) "\u2713" else "\u2715"
+      Text(
+        iconChar,
+        color = Color.White,
+        style = MaterialTheme.typography.headlineLarge,
+        textAlign = TextAlign.Center
+      )
     }
+
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(text = label, textAlign = TextAlign.Center, color = Color.White)
+  }
 }
 
 @Preview
 @Composable
 private fun OutcomeScreenPreview() {
-    OutcomeScreen(outcomeText = "success")
+  OutcomeScreen(outcomeText = "success")
 }
