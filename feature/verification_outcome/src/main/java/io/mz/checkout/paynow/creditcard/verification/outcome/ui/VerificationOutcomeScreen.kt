@@ -50,28 +50,45 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.mz.checkout.paynow.creditcard.verification.outcome.R
-import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorFailure
-import io.mz.checkout.paynow.creditcard.verification.outcome.ui.theme.ColorSuccess
 import kotlin.math.PI
 import kotlin.math.sin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+private const val animationDuration = 1200
+
+private const val waveAmplitude = 0.06f
+
+private const val wavelength = 1.2f
+
+private const val waveStep = 40f
+
 @Composable
 fun OutcomeScreen(
   modifier: Modifier = Modifier,
+  viewModel: VerificationViewModel = hiltViewModel(),
   outcomeText: String,
   onBackPressed: () -> Unit = {}
 ) {
-  val isSuccess = outcomeText.equals("success", ignoreCase = true)
-  val isFailure = outcomeText.equals("failure", ignoreCase = true)
-  val color = when {
-    isSuccess -> ColorSuccess
-    isFailure -> ColorFailure
-    else -> ColorFailure
-  }
+  viewModel.setOutcome(outcomeText)
+  val state by viewModel.outComeState.collectAsStateWithLifecycle()
 
+  OutcomeContent(
+    modifier = modifier,
+    state = state,
+    onBackPressed = onBackPressed
+  )
+}
+
+@Composable
+fun OutcomeContent(
+  modifier: Modifier = Modifier,
+  state: VerificationOutcome,
+  onBackPressed: () -> Unit
+) {
   val fillProgress = remember { Animatable(0f) }
   val wavePhase = remember { Animatable(0f) }
   LaunchedEffect(Unit) {
@@ -85,14 +102,14 @@ fun OutcomeScreen(
       launch {
         wavePhase.animateTo(
           targetValue = (2f * PI).toFloat(),
-          animationSpec = tween(durationMillis = 1200, easing = LinearEasing)
+          animationSpec = tween(durationMillis = animationDuration, easing = LinearEasing)
         )
       }
     }
   }
 
   var containerTopPx by remember { mutableFloatStateOf(0f) }
-  var backTopPx by remember { mutableFloatStateOf(Float.NaN) }
+  var backButtonTopPx by remember { mutableFloatStateOf(Float.NaN) }
 
   Box(
     modifier = Modifier
@@ -103,18 +120,21 @@ fun OutcomeScreen(
     contentAlignment = Alignment.Center
   ) {
     Canvas(modifier = Modifier.matchParentSize()) {
-      val bottom = if (backTopPx.isNaN()) size.height else backTopPx.coerceIn(0f, size.height)
+      val bottom = if (backButtonTopPx.isNaN()) size.height else backButtonTopPx.coerceIn(
+        0f,
+        size.height
+      )
       if (bottom > 0f) {
         clipRect(left = 0f, top = 0f, right = size.width, bottom = bottom) {
-          val amplitude = size.height * 0.06f
-          val wavelength = size.width / 1.2f
+          val amplitude = size.height * waveAmplitude
+          val wavelength = size.width / wavelength
           val baselineY = (bottom * (1f - fillProgress.value)).coerceIn(0f, bottom)
 
           val wave = Path().apply {
             moveTo(0f, bottom)
             lineTo(0f, baselineY)
             var x = 0f
-            val step = size.width / 40f
+            val step = size.width / waveStep
             while (x <= size.width + step) {
               val phase: Double =
                 (2.0 * PI * (x.toDouble() / wavelength.toDouble())) + wavePhase.value.toDouble()
@@ -125,7 +145,7 @@ fun OutcomeScreen(
             lineTo(size.width, bottom)
             close()
           }
-          drawPath(path = wave, color = color)
+          drawPath(path = wave, color = state.color)
         }
       }
     }
@@ -134,7 +154,7 @@ fun OutcomeScreen(
       modifier = Modifier
         .padding(horizontal = 16.dp)
         .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
-      outcomeText = outcomeText
+      state = state
     )
 
     OutlinedButton(
@@ -144,7 +164,7 @@ fun OutcomeScreen(
         .align(Alignment.BottomCenter)
         .onGloballyPositioned { coords ->
           val buttonTopInRoot = coords.positionInRoot().y
-          backTopPx = (buttonTopInRoot - containerTopPx)
+          backButtonTopPx = (buttonTopInRoot - containerTopPx)
         },
       onClick = { onBackPressed() },
       shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
@@ -164,28 +184,10 @@ fun OutcomeScreen(
 }
 
 @Composable
-fun OutcomeText(modifier: Modifier = Modifier, outcomeText: String) {
-  val isSuccess = outcomeText.equals("success", ignoreCase = true)
-  val isFailure = outcomeText.equals("failure", ignoreCase = true)
-
-  val label = when {
-    isSuccess -> stringResource(R.string.result_approved)
-    isFailure -> stringResource(R.string.result_declined)
-    else -> stringResource(id = R.string.result_declined)
-  }
-
-  OutcomeContent(modifier, isSuccess, label)
-}
-
-@Composable
-private fun OutcomeContent(
-  modifier: Modifier,
-  isSuccess: Boolean,
-  label: String
-) {
+fun OutcomeText(modifier: Modifier = Modifier, state: VerificationOutcome) {
   Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
     Box(contentAlignment = Alignment.Center) {
-      val iconChar = if (isSuccess) "\u2713" else "\u2715"
+      val iconChar = if (state is Success) "\u2713" else "\u2715"
       Text(
         iconChar,
         color = Color.White,
@@ -195,12 +197,16 @@ private fun OutcomeContent(
     }
 
     Spacer(modifier = Modifier.height(24.dp))
-    Text(text = label, textAlign = TextAlign.Center, color = Color.White)
+    Text(
+      text = stringResource(state.message),
+      textAlign = TextAlign.Center,
+      color = Color.White
+    )
   }
 }
 
 @Preview
 @Composable
-private fun OutcomeScreenPreview() {
-  OutcomeScreen(outcomeText = "success")
+private fun OutcomeContentPreview() {
+  OutcomeContent(state = Success, onBackPressed = {})
 }
