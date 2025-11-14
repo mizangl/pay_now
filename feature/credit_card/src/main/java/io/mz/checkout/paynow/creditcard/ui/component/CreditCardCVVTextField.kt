@@ -37,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -62,12 +61,12 @@ fun CreditCardCVVTextField(
 ) {
   var showCode by remember { mutableStateOf(false) }
 
-  val currentOnFocusChanged by rememberUpdatedState(onFocusChanged)
-
   OutlinedTextField(
-    modifier = modifier.onFocusChanged { focusState ->
-      currentOnFocusChanged(textFieldState.text.toString(), focusState.isFocused)
-    }.testTag(TestTags.CreditCardCVV.OUTLINE_TEXT_FIELD),
+    modifier = modifier
+      .onFocusChanged { focusState ->
+        onFocusChanged(textFieldState.text.toString(), focusState.isFocused)
+      }
+      .testTag(TestTags.CreditCardCVV.OUTLINE_TEXT_FIELD),
     state = textFieldState,
     isError = isError || errors.isNotEmpty(),
     supportingText = @Composable {

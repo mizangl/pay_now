@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -90,8 +89,6 @@ fun CreditCardForm(
 
   val focusManager = LocalFocusManager.current
 
-  val currentPayClicked by rememberUpdatedState(onPayClicked)
-
   Column(
     modifier = Modifier
       .padding(horizontal = 16.dp)
@@ -109,7 +106,8 @@ fun CreditCardForm(
     val dateTextFieldState = rememberTextFieldState()
 
     CreditCardNumberTextField(
-      modifier = Modifier.fillMaxWidth()
+      modifier = Modifier
+        .fillMaxWidth()
         .semantics(true) { testTag = TestTags.CreditCardNumber.CREDIT_CARD_FIELD },
       onNextClicked = { focusRequesterDate.requestFocus() },
       onFocusChanged = onSelectedCardEntry,
@@ -162,12 +160,12 @@ fun CreditCardForm(
         .fillMaxWidth()
         .semantics(true) { testTag = TestTags.CreditCardPayButton.CREDIT_CARD_FIELD },
       formState = { formState() },
-      currentPayClicked = {
+      payClicked = {
         // workaround for tapping pay button after updating fields
         onSelectedCvv(cvvTextFieldState.text.toString(), true)
         onSelectedDate(dateTextFieldState.text.toString(), true)
         //
-        currentPayClicked()
+        onPayClicked()
       }
     )
   }

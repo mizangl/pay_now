@@ -34,13 +34,13 @@ import io.mz.checkout.paynow.creditcard.ui.model.FormState
  * Composable for triggering payment actions in a credit card form.
  *
  * @param modifier Modifier to be applied to the button for layout or styling.
- * @param currentPayClicked A callback triggered when the button is clicked.
+ * @param payClicked A callback triggered when the button is clicked.
  * @param formState A function returning the current state of the form.
  */
 @Composable
 fun CreditCardPayButton(
   modifier: Modifier = Modifier,
-  currentPayClicked: () -> Unit,
+  payClicked: () -> Unit,
   formState: () -> FormState
 ) {
   val formState = formState()
@@ -49,7 +49,7 @@ fun CreditCardPayButton(
     modifier = modifier.semantics(mergeDescendants = true) {
       testTag = TestTags.CreditCardPayButton.OUTLINED_BUTTON
     },
-    onClick = { currentPayClicked() },
+    onClick = { payClicked() },
     shape = MaterialTheme.shapes.extraLarge.copy(all = CornerSize(2.dp)),
     colors = ButtonColors(
       containerColor = Color.Black.copy(alpha = 0.9f),
