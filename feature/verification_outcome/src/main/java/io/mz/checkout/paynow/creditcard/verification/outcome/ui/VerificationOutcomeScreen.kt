@@ -58,14 +58,6 @@ import kotlin.math.sin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-private const val animationDuration = 1200
-
-private const val waveAmplitude = 0.06f
-
-private const val wavelength = 1.2f
-
-private const val waveStep = 40f
-
 @Composable
 fun OutcomeScreen(
   modifier: Modifier = Modifier,
@@ -210,3 +202,11 @@ fun OutcomeText(modifier: Modifier = Modifier, state: VerificationOutcome) {
 private fun OutcomeContentPreview() {
   OutcomeContent(state = Success, onBackPressed = {})
 }
+
+private const val animationDuration = 700
+
+private const val waveAmplitude = 0.06f
+
+private const val wavelength = 1.2f
+
+private const val waveStep = 40f
