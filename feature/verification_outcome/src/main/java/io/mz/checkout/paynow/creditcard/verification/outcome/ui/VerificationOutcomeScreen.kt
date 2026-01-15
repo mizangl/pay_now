@@ -144,8 +144,7 @@ fun OutcomeContent(
 
     OutcomeText(
       modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
+        .padding(horizontal = 16.dp),
       state = state
     )
 
@@ -190,6 +189,8 @@ fun OutcomeText(modifier: Modifier = Modifier, state: VerificationOutcome) {
 
     Spacer(modifier = Modifier.height(24.dp))
     Text(
+      modifier = Modifier
+        .testTag(TestTags.VerificationOutcomeScreen.OUTCOME_RESULT),
       text = stringResource(state.message),
       textAlign = TextAlign.Center,
       color = Color.White

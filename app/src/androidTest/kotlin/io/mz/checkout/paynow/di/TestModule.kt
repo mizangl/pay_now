@@ -23,7 +23,7 @@ import io.mz.checkout.paynow.creditcard.processor.api.TokenApi
 import io.mz.checkout.paynow.creditcard.processor.di.ApiModule as ApiModuleCreditCardProcessor
 import io.mz.checkout.paynow.creditcard.processor.di.TokenClient
 import io.mz.checkout.paynow.creditcard.processor.interceptor.AuthInterceptor as CreditCardProcessorAuthInterceptor
-import io.mz.checkout.paynow.dispatcher.MOCK_SERVER
+import io.mz.checkout.paynow.interceptor.MockWebServerInterceptor
 import io.mz.checkout.paynow.payment.processor.api.PaymentProcessorApi
 import io.mz.checkout.paynow.payment.processor.di.ApiModule as ApiModulePaymentProcessor
 import io.mz.checkout.paynow.payment.processor.di.ProcessorClient
@@ -45,7 +45,7 @@ object TestModule {
     @ProcessorClient client: OkHttpClient,
     retrofit: Retrofit.Builder
   ): PaymentProcessorApi {
-    return retrofit.baseUrl(MOCK_SERVER)
+    return retrofit
       .client(client)
       .build()
       .create((PaymentProcessorApi::class.java))
@@ -54,8 +54,13 @@ object TestModule {
   @Provides
   @Singleton
   @ProcessorClient
-  fun provideProcessorHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder().addInterceptor(CreditCardProcessorAuthInterceptor()).build()
+  fun provideProcessorHttpClient(
+    mockWebServerInterceptor: MockWebServerInterceptor
+  ): OkHttpClient {
+    return OkHttpClient.Builder()
+      .addInterceptor(mockWebServerInterceptor)
+      .addInterceptor(CreditCardProcessorAuthInterceptor())
+      .build()
   }
 
   @Provides
@@ -64,7 +69,7 @@ object TestModule {
     @TokenClient client: OkHttpClient,
     retrofit: Retrofit.Builder
   ): TokenApi {
-    return retrofit.baseUrl(MOCK_SERVER)
+    return retrofit
       .client(client)
       .build()
       .create((TokenApi::class.java))
@@ -73,7 +78,12 @@ object TestModule {
   @Provides
   @Singleton
   @TokenClient
-  fun provideHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder().addInterceptor(PaymentProcessorAuthInterceptor()).build()
+  fun provideHttpClient(
+    mockWebServerInterceptor: MockWebServerInterceptor
+  ): OkHttpClient {
+    return OkHttpClient.Builder()
+      .addInterceptor(mockWebServerInterceptor)
+      .addInterceptor(PaymentProcessorAuthInterceptor())
+      .build()
   }
 }

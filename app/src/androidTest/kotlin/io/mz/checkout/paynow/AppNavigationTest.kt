@@ -33,6 +33,8 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.mz.checkout.paynow.creditcard.ui.component.TestTags as CreditCardFormTestTags
 import io.mz.checkout.paynow.creditcard.verification.outcome.ui.TestTags as VerificationTestTags
 import io.mz.checkout.paynow.dispatcher.FlowDispatcher
+import io.mz.checkout.paynow.interceptor.MockWebServerInterceptor
+import javax.inject.Inject
 import mockwebserver3.MockWebServer
 import org.junit.After
 import org.junit.Before
@@ -42,6 +44,9 @@ import org.junit.Test
 @OptIn(ExperimentalTestApi::class)
 @HiltAndroidTest
 class AppNavigationTest {
+
+  @Inject
+  lateinit var mockWebServerInterceptor: MockWebServerInterceptor
 
   @get:Rule(order = 0)
   val hiltRule = HiltAndroidRule(this)
@@ -77,7 +82,8 @@ class AppNavigationTest {
   @Before
   fun setup() {
     hiltRule.inject()
-    server.start(8080)
+    server.start()
+    mockWebServerInterceptor.mockServerUrl = server.url("/").toString()
   }
 
   @After
